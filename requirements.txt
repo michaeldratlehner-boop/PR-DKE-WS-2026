@@ -1,0 +1,7 @@
+# Python-Abhaengigkeiten. Installieren mit:
+#   pip install -r requirements.txt
+
+supabase>=2.33        # Supabase-Client: Tabellen, Storage, RPC
+python-dotenv>=1.0    # liest die .env-Datei
+pypdf>=6.0            # liest PDFs (Seitenzahl, Textextraktion)
+psycopg[binary]>=3.3  # direkte Postgres-Verbindung (SQL-Dateien)

@@ -1,1 +1,12 @@
+# Lokale Zugangsdaten - niemals committen
 .env
+
+# Virtuelle Python-Umgebung
+.venv/
+__pycache__/
+
+# Heruntergeladene Anleitungen: urheberrechtlich geschuetzt,
+# kommen nicht ins Repo. Der Ordner selbst bleibt erhalten.
+anleitungen/*
+!anleitungen/.gitkeep
+*.pdf
