@@ -5,6 +5,9 @@
 .venv/
 __pycache__/
 
+# PyCharm-Einstellungen (persönlich)
+.idea/
+
 # Heruntergeladene Anleitungen: urheberrechtlich geschuetzt,
 # kommen nicht ins Repo. Der Ordner selbst bleibt erhalten.
 anleitungen/*
