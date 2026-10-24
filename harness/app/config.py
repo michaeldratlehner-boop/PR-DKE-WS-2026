@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     supabase_url: str
     supabase_key: str
     gemini_api_key: str
+    gemini_model: str
 
     model_config = SettingsConfigDict(env_file=REPO_ROOT / ".env", extra="ignore")
 
