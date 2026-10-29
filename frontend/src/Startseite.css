@@ -1,0 +1,123 @@
+
+/* Gesamte Startseite */
+.startseite {
+    min-height: 100vh;
+    background-color: #f7f8fa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 45px 20px;
+    font-family: Arial, sans-serif;
+    color: #111111;
+}
+
+/* Logo und App-Name */
+.startseite .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.logo {
+    width: 120px;
+    height: auto;
+}
+
+.startseite .header h1 {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 8px 0 0;
+}
+
+.startseite .header h2 {
+    font-size: 20px;
+    font-weight: 300;
+    color: #555555;
+    margin: 0;
+}
+
+/* Überschrift */
+.haupttitel {
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+    margin: 45px 0 45px;
+}
+
+/* Container für beide Buttons */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+    flex-wrap: wrap;
+}
+
+/* Gemeinsame Gestaltung */
+.startseite .auswahl-button {
+    width: 195px;
+    height: 198px;
+    border: none;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 12px;
+    cursor: pointer;
+    font-family: inherit;
+    color: #111111;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Produktfinder: Hellblau */
+.startseite .produktfinder {
+    background-color: #dce5f7;
+}
+
+/* Wartungsfragen: Hellgrün */
+.startseite .wartung {
+    background-color: #d1efc9;
+}
+
+/* Bilder innerhalb der Buttons */
+.button-icon {
+    width: 88px;
+    height: 88px;
+    object-fit: contain;
+}
+
+/* Button-Überschriften */
+.button-titel {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+/* Beschreibung unter den Buttons */
+.button-text {
+    font-size: 14px;
+    font-weight: 300;
+    color: #666666;
+    line-height: 1.3;
+    margin-top: 8px;
+}
+
+/* Effekt beim Darüberfahren */
+.startseite .auswahl-button:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* Anpassung für Smartphones */
+@media (max-width: 600px) {
+    .haupttitel {
+        font-size: 28px;
+    }
+
+    .button-container {
+        gap: 20px;
+    }
+}

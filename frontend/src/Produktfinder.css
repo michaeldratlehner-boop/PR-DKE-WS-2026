@@ -1,0 +1,174 @@
+
+/* Gesamte Produktfinder-Seite */
+.pf-seite {
+    min-height: 100vh;
+    background-color: #f7f8fa;
+    padding: 25px;
+    font-family: Arial, sans-serif;
+    color: #111;
+}
+
+/* Äußerer Rahmen */
+.pf-rahmen {
+    max-width: 730px;
+    min-height: 520px;
+    margin: 0 auto;
+    border: 1px solid #e5e7eb;
+    padding: 27px 29px 40px;
+}
+
+/* Navigation oben */
+.pf-navigation {
+    display: grid;
+    grid-template-columns: 85px minmax(0, 525px);
+    gap: 39px;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+/* Zurück-Button */
+.pf-zurueck {
+    background-color: #dce5f7;
+    border: none;
+    border-radius: 14px;
+    height: 40px;
+    cursor: pointer;
+    color: #111;
+}
+
+/* Grauer Titelbalken */
+.pf-titel {
+    background-color: #e1e4ec;
+    border-radius: 14px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 17px;
+}
+
+/* Formular und Ergebnisse */
+.pf-inhalt {
+    max-width: 525px;
+    margin-left: 124px;
+}
+
+/* Weißer Formularbereich */
+.pf-formular {
+    background-color: #fff;
+    border: 1px solid #e0e7f5;
+    border-radius: 14px;
+    padding: 22px 10px;
+}
+
+.pf-formular p {
+    font-size: 13px;
+    margin: 0 0 22px;
+}
+
+/* Auswahlfelder */
+.pf-filter {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 13px 28px;
+}
+
+.pf-filter select {
+    width: 100%;
+    height: 37px;
+    padding: 0 13px;
+    border: 1px solid #aaa;
+    border-radius: 12px;
+    background: white;
+    color: #111;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* Suchen-Button */
+.pf-suchen {
+    justify-self: center;
+    align-self: center;
+    width: 80px;
+    height: 37px;
+    border: none;
+    border-radius: 14px;
+    background-color: #dce5f7;
+    color: #111;
+    cursor: pointer;
+}
+
+.pf-suchen:hover,
+.pf-zurueck:hover {
+    background-color: #bdcfee;
+}
+
+/* Ergebnisse */
+.pf-ergebnisse-titel {
+    font-size: 19px;
+    margin: 20px 0 10px;
+}
+
+.pf-ergebnisse {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 35px;
+}
+
+.pf-karte {
+    background: #fff;
+    height: 198px;
+    border-radius: 14px;
+}
+
+.pf-hinweis {
+    margin-top: 18px;
+    font-size: 13px;
+    color: #555;
+}
+
+/* Anpassung für Smartphones */
+@media (max-width: 700px) {
+    .pf-rahmen {
+        padding: 20px;
+    }
+
+    .pf-navigation {
+        grid-template-columns: 85px 1fr;
+        gap: 15px;
+    }
+
+    .pf-inhalt {
+        margin-left: 0;
+        max-width: none;
+    }
+
+    .pf-filter {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .pf-ergebnisse {
+        gap: 12px;
+    }
+}
+/* Inhalt nimmt verfügbaren Platz ein */
+.wf-layout {
+    flex: 1;
+}
+
+/* KI-Hinweis unten rechts */
+.wf-ki-hinweis {
+    align-self: flex-end;
+    margin: 20px 0 0;
+    font-size: 11px;
+    color: #777;
+    text-align: right;
+}
+
+
+@media (max-width: 420px) {
+    .pf-ergebnisse {
+        grid-template-columns: 1fr;
+    }
+}
