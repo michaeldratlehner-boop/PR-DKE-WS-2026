@@ -28,3 +28,6 @@ class Produkt(BaseModel):
 class ProduktfinderAntwort(BaseModel):
     treffer: list[Produkt]
     hinweis: str = "Du sprichst mit einer KI-Anwendung."
+
+class ChatAnfrage(BaseModel):
+    nachricht: str
