@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field
-
+from pydantic import BaseModel, Field, ConfigDict
 #IN DIESER DATEI WERDEN ALLE EIN- UND AUSGABEFORMATE DEFINIERT!
+
+# Ein gemeinsamer KI-Hinweis (EU AI Act, Art. 50) für alle Antworten
+KI_HINWEIS = "Du sprichst mit einer KI-Anwendung."
 
 #pydantic prüft automatisch, ob das Eingabepattern eingehalten wird, und nur valide Werte verwendet werden.
 class ProduktfinderAnfrage(BaseModel):
@@ -27,7 +29,45 @@ class Produkt(BaseModel):
 
 class ProduktfinderAntwort(BaseModel):
     treffer: list[Produkt]
-    hinweis: str = "Du sprichst mit einer KI-Anwendung."
+    hinweis: str = KI_HINWEIS
 
 class ChatAnfrage(BaseModel):
     nachricht: str
+
+class WartungAnfrage(BaseModel):
+    """Eine Wartungsfrage zu einem bestimmten Gerät."""
+    # entfernt Leerzeichen am Rand, damit "   " als leer gilt
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    frage: str = Field(min_length=3, max_length=1500)
+    produkt_id: int = Field(gt=0)
+    # TODO: Produkt_ID nicht aus dem Frontend fix erwarten sondern ermitteln.
+    # produkt_id: int | None = Field(default=None, gt=0)
+    # verlauf: list[Nachricht] = Field(default_factory=list, max_length=20)
+
+#class Nachricht(BaseModel):
+#    """Eine Zeile aus dem bisherigen Chatverlauf."""
+#    rolle: Literal["nutzer", "assistent"]
+#    text: str = Field(max_length=1000)
+
+
+#class ProduktKurz(BaseModel):
+#    """Das erkannte Gerät, das das Frontend sich merkt."""
+#    produkt_id: int
+#    hersteller: str
+#    modell: str
+
+class Quelle(BaseModel):
+    """Eine Fundstelle in der Anleitung, auf die sich die Antwort stützt."""
+    seite: int | None = None
+    abschnitt: str | None = None
+
+class WartungAntwort(BaseModel):
+    # "rueckfrage": Gerät noch unklar, antwort enthält die Frage an den Nutzer
+    # art: Literal["antwort", "rueckfrage"] = "antwort"
+    antwort: str
+    # produkt: ProduktKurz | None = None
+    quellen: list[Quelle] = Field(default_factory=list)
+    # False, wenn in der Anleitung nichts Passendes steht
+    gefunden: bool = True
+    hinweis: str = KI_HINWEIS

@@ -12,6 +12,12 @@ class Settings(BaseSettings):
     gemini_api_key: str
     gemini_model: str
 
+    # Origins, die den Harness im Browser aufrufen dürfen (Frontend, Vite)
+    cors_origins: list[str] = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
+
     model_config = SettingsConfigDict(env_file=REPO_ROOT / ".env", extra="ignore")
     default_system_prompt: str = "Du bist ein hilfreicher Assistent für Haushaltsgeräte. Antworte auf Deutsch."
     fallback_models: list[str] = ["gemini-3.6-flash", "gemini-3.8-flash","gemini-1.5-pro", "gemini-1.5-flash", "gemini-1.5-flash-8b"]
