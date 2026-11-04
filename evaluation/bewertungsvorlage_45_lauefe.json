@@ -1,0 +1,1411 @@
+{
+  "status": "leere_bewertungsvorlage_keine_messung",
+  "anleitung": "Pro Durchlauf den echten Trace zuordnen. Zwei Personen bewerten getrennt. Unbekannte Werte bleiben null.",
+  "messrunde": {
+    "id": null,
+    "datum": null,
+    "code_version": null,
+    "datenbestand_version": null,
+    "prompt_version": null,
+    "golden_dataset_version": null,
+    "bewertende_person_1": null,
+    "bewertende_person_2": null
+  },
+  "laeufe": [
+    {
+      "fall_id": "G-01",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-01",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-01",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-02",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-02",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-02",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-03",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-03",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-03",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-04",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-04",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-04",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-05",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-05",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-05",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-06",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-06",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-06",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-07",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-07",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-07",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-08",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-08",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-08",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-09",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-09",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-09",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-10",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-10",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-10",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-11",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-11",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-11",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-12",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-12",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-12",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-13",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-13",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-13",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-14",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-14",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-14",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-15",
+      "durchlauf": 1,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-15",
+      "durchlauf": 2,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    },
+    {
+      "fall_id": "G-15",
+      "durchlauf": 3,
+      "ausgefuehrt": false,
+      "trace_id": null,
+      "retrieval": {
+        "anwendbar": null,
+        "erwartete_quellenschluessel": null,
+        "gefundene_quellenschluessel": null,
+        "recall_at_5": null,
+        "reciprocal_rank_at_5": null
+      },
+      "generierung": {
+        "aussagen_gedeckt": null,
+        "faithfulness": null,
+        "answer_relevance_0_1_2": null
+      },
+      "person_1": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "person_2": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "endbewertung": {
+        "punkte": null,
+        "begruendung": null
+      },
+      "fehlerklasse": null
+    }
+  ]
+}

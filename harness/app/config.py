@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     supabase_key: str
     gemini_api_key: str
     gemini_model: str
+    gemini_embedding_model: str = "gemini-embedding-2"
 
     model_config = SettingsConfigDict(env_file=REPO_ROOT / ".env", extra="ignore")
 
