@@ -76,11 +76,22 @@ BEFOLGE DIESE REGELN STRIKT:
     # Die finale Nachricht an das LLM
     finaler_prompt = f"{kontext_text}\n\nFRAGE DES NUTZERS:\n{frage}"
 
-    # Asynchroner Aufruf des Modells
-    antwort = await _client.aio.models.generate_content(
-        model=settings.gemini_model,
-        contents=finaler_prompt,
-        config=types.GenerateContentConfig(system_instruction=wartung_system_prompt),
-    )
+    # Liste aus dem Hauptmodell und den Fallbacks erstellen
+    modelle_zum_testen = [settings.gemini_model] + settings.fallback_models
 
-    return antwort.text or "weiß ich nicht"
+    # Fallback-Schleife abarbeiten
+    for model_name in modelle_zum_testen:
+        try:
+            antwort = await _client.aio.models.generate_content(
+                model=model_name,
+                contents=finaler_prompt,
+                config=types.GenerateContentConfig(system_instruction=wartung_system_prompt),
+            )
+            return antwort.text or "weiß ich nicht"
+
+        except errors.APIError as e:
+            # Fehler in der Konsole loggen und zum nächsten Modell springen
+            print(f"Warnung: Modell {model_name} fehlgeschlagen beim Wartungsassistenten ({e}). Wechsle...")
+            continue
+
+    return "Entschuldigung, derzeit sind alle KI-Modelle überlastet. Bitte versuche es später noch einmal."
