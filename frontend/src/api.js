@@ -46,3 +46,29 @@ export async function sucheProdukte(filter) {
 
     return antwort.json();
 }
+
+
+// Wartungsfrage an das FastAPI-Backend senden
+//export -> damit andere die Funktion importieren können,
+//async -> funktion wartet auf Serverantwort - ohne Benutzeroberfläche zu blockieren
+export async function frageWartung(frage, produktId) {
+
+    //sendet an API Wartung POST
+    const antwort = await fetch(`${API_URL}/wartung`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        //Datenübertragung, stringify -> wandelt Text um in json
+        body: JSON.stringify({
+            frage: frage,
+            produkt_id: produktId
+        })
+    });
+
+    if (!antwort.ok) {
+        throw new Error("Fehler bei der Wartungsanfrage");
+    }
+
+    return await antwort.json();
+}

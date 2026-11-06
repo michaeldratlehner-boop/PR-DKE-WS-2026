@@ -1,5 +1,6 @@
 
 import { useState, useRef } from 'react';
+import { frageWartung } from './api.js';
 import './Wartungsfragen.css';
 
 export default function Wartungsfragen({ setSeite }) {
@@ -12,6 +13,18 @@ export default function Wartungsfragen({ setSeite }) {
 
     // Bestimmt, ob die Antwortansicht angezeigt wird
     const [antwortAnzeigen, setAntwortAnzeigen] = useState(false);
+
+    // Speichert die tatsächliche Antwort von FastAPI
+    const [antwort, setAntwort] = useState("");
+
+    // Speichert eine mögliche Fehlermeldung
+        const [fehler, setFehler] = useState("");
+
+    // Zeigt an, ob die Anfrage gerade verarbeitet wird
+        const [laden, setLaden] = useState(false);
+
+    // Speichert die ID der ausgewählten Waschmaschine
+    const [produktId, setProduktId] = useState("");
 
     // Referenz auf das Datei-Eingabefeld
     const dateiInput = useRef(null);
@@ -42,15 +55,42 @@ export default function Wartungsfragen({ setSeite }) {
     }
 
     // Frage absenden
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
 
-        if (frage.trim() === "") {
+        // Prüfen, ob Frage und Produkt-ID gültig sind
+        if (frage.trim().length < 3 || !Number.isInteger(Number(produktId))
+            || Number(produktId) <= 0) {
+            setFehler("Bitte gültige Frage und Produkt-ID eingeben.");
             return;
         }
+        setLaden(true);
+        setFehler("");
 
-        // Später erfolgt hier die Anfrage an FastAPI
-        setAntwortAnzeigen(true);
+        try {
+            // Anfrage an das Backend senden -> Anwendung der Funktion aus api.js
+            //await, da es auf das Ergebnis wartet
+            const daten = await frageWartung(
+                frage,
+                Number(produktId)
+            );
+
+            // Antwort von FastAPI speichern - daten.antwort wird direkt auf den
+            // Antworttext von Json zugeriffen
+            setAntwort(daten.antwort);
+
+            // Antwortansicht öffnen
+            setAntwortAnzeigen(true);
+
+            // Eingabefeld nach erfolgreicher Antwort leeren
+            setFrage("");
+
+        } catch (error) {
+            setFehler(error.message);
+
+        } finally {
+            setLaden(false);
+        }
     }
 
 
@@ -85,18 +125,7 @@ export default function Wartungsfragen({ setSeite }) {
                     {/* Zweite Ansicht: Antwortbereich */}
                     {antwortAnzeigen && (
                         <div className="wf-antwort">
-                            <p>
-                                Hier wird später die Antwort
-                                des Waschmaschinen-Assistenten
-                                zu deiner Frage angezeigt.
-                            </p>
-
-                            <ol>
-                                <li>Schritt 1 der Anleitung</li>
-                                <li>Schritt 2 der Anleitung</li>
-                                <li>Schritt 3 der Anleitung</li>
-                                <li>Schritt 4 der Anleitung</li>
-                            </ol>
+                            <p>{antwort}</p>
                         </div>
                     )}
 
@@ -109,6 +138,18 @@ export default function Wartungsfragen({ setSeite }) {
                         }
                         onSubmit={handleSubmit}
                     >
+                        {/* Produkt-ID für die Zuordnung der Waschmaschine - noch abklären,ob das so bleibt*/}
+                        <input
+                            type="number"
+                            min="1"
+                            step="1"
+                            placeholder="Produkt-ID eingeben"
+                            value={produktId}
+                            onChange={(event) => setProduktId(event.target.value)}
+                            className="wf-produkt-id"
+                        />
+                        <div className="wf-fragenkasten">
+
                     <textarea
                         className="wf-eingabe"
                         placeholder="Stelle deine Frage..."
@@ -151,7 +192,18 @@ export default function Wartungsfragen({ setSeite }) {
                                     : "Antworten finden"}
                             </button>
                         </div>
+                        </div>
                     </form>
+
+                    {/* Ladeanzeige */}
+                    {laden && (
+                        <p>Antwort wird erstellt...</p>
+                    )}
+
+                    {/* Fehlermeldung */}
+                    {fehler && (
+                        <p className="wf-fehler">{fehler}</p>
+                    )}
 
                     {/* Ausgewählte Datei */}
                     {datei && !antwortAnzeigen && (
