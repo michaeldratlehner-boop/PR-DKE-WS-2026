@@ -52,3 +52,46 @@ async def generiere_antwort_async_stream(prompt: str, system: str | None = None)
 
         # Wenn alle Modelle fehlschlagen, werfe den letzten Fehler oder gib eine Meldung aus
     yield "Entschuldigung, derzeit sind alle KI-Modelle überlastet. Bitte versuche es später noch einmal."
+
+
+async def generiere_wartungsantwort(frage: str, absaetze: list[dict]) -> str:
+    """Baut den Kontext auf und holt die Antwort von Gemini."""
+
+    # System-Prompt exakt nach den Vorgaben aus dem Dokument "Durchstich 10. November"
+    wartung_system_prompt = """Du bist ein technischer Wartungsberater für Haushaltsgeräte.
+BEFOLGE DIESE REGELN STRIKT:
+1. Du darfst ausschließlich aus den übergebenen Absätzen antworten.
+2. Wenn die Antwort nicht in den Absätzen steht, antworte exakt mit: 'weiß ich nicht'. Du darfst nicht raten!
+3. SICHERHEITSREGEL: Bei Elektroreparaturen darfst du keine Anleitung geben, sondern musst auf den Kundendienst verweisen.
+4. Du musst die Quelle (Seite und Abschnitt) in deine Antwort übernehmen (z.B. 'laut Seite 34, Abschnitt Störungen')."""
+
+    # Kontext aus den Datenbank-Chunks bauen
+    kontext_text = "HIER SIND DIE AUSZÜGE AUS DER BEDIENUNGSANLEITUNG:\n\n"
+    for chunk in absaetze:
+        seite = chunk.get("seite", "Unbekannt")
+        abschnitt = chunk.get("abschnitt", "Unbekannt")
+        inhalt = chunk.get("inhalt", "")
+        kontext_text += f"--- Seite: {seite} | Abschnitt: {abschnitt} ---\n{inhalt}\n\n"
+
+    # Die finale Nachricht an das LLM
+    finaler_prompt = f"{kontext_text}\n\nFRAGE DES NUTZERS:\n{frage}"
+
+    # Liste aus dem Hauptmodell und den Fallbacks erstellen
+    modelle_zum_testen = [settings.gemini_model] + settings.fallback_models
+
+    # Fallback-Schleife abarbeiten
+    for model_name in modelle_zum_testen:
+        try:
+            antwort = await _client.aio.models.generate_content(
+                model=model_name,
+                contents=finaler_prompt,
+                config=types.GenerateContentConfig(system_instruction=wartung_system_prompt),
+            )
+            return antwort.text or "weiß ich nicht"
+
+        except errors.APIError as e:
+            # Fehler in der Konsole loggen und zum nächsten Modell springen
+            print(f"Warnung: Modell {model_name} fehlgeschlagen beim Wartungsassistenten ({e}). Wechsle...")
+            continue
+
+    return "Entschuldigung, derzeit sind alle KI-Modelle überlastet. Bitte versuche es später noch einmal."
