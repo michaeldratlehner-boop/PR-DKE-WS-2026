@@ -1,0 +1,411 @@
+{
+  "schema_version": 1,
+  "status": "entwurf_mit_offenen_fundstellen",
+  "beschreibung": "15 Testfaelle fuer den Waschmaschinen-Assistenten. Keine Messungen oder Ergebnisse.",
+  "herkunft": "G-01, G-06 und G-14 aus der bestehenden Praesentation; weitere Fragen als Vorschlag zum aktuellen Code.",
+  "hinweis": "Neun Faelle erfordern noch konkrete Quellen/Sollwerte. bereit=true bedeutet fachlich vorgegeben, nicht bereits getestet.",
+  "durchlaeufe_je_fall": 3,
+  "rubrik": {
+    "2": "Vollstaendig richtig und belegt beziehungsweise erwartete Rueckfrage/korrekte Ablehnung.",
+    "1": "Teilweise richtig, wesentliche Information oder erforderlicher Beleg fehlt.",
+    "0": "Falsch, erfunden, am Thema vorbei oder wesentliche Anforderung verletzt."
+  },
+  "faelle": [
+    {
+      "id": "G-01",
+      "frage": "Was bedeutet E18 bei meiner Maschine?",
+      "kategorie": "Stoerung",
+      "bereich": "berater",
+      "negativfall": false,
+      "bereit": true,
+      "kontext": {
+        "produkt_id": 7,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": null,
+      "erwartete_aktion": "antwort",
+      "erwartete_quellen": [
+        {
+          "bezeichnung": "Anleitung Modell 7",
+          "seite": 34
+        }
+      ],
+      "erwartete_kernaussagen": [
+        "Pumpe / Flusensieb pruefen."
+      ],
+      "noch_zu_klaeren": [],
+      "hinweise": [
+        "Unveraendert aus dem bereits festgelegten Praesentationsbeispiel uebernommen."
+      ]
+    },
+    {
+      "id": "G-02",
+      "frage": "Wie reinige ich das Flusensieb meiner Waschmaschine?",
+      "kategorie": "Wartung",
+      "bereich": "berater",
+      "negativfall": false,
+      "bereit": false,
+      "kontext": {
+        "produkt_id": 7,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": null,
+      "erwartete_aktion": "antwort",
+      "erwartete_quellen": [
+        {
+          "bezeichnung": "Anleitung Modell 7",
+          "seite": null
+        }
+      ],
+      "erwartete_kernaussagen": [
+        "Die im Handbuch beschriebenen Vorbereitungen, Reinigungsschritte und Sicherheitshinweise wiedergeben."
+      ],
+      "noch_zu_klaeren": [
+        "Die konkrete Seite festhalten.",
+        "Die tatsaechlichen Handlungsschritte vorab aus der Anleitung notieren."
+      ],
+      "hinweise": []
+    },
+    {
+      "id": "G-03",
+      "frage": "Wie reinige ich die Waschmittelschublade?",
+      "kategorie": "Wartung",
+      "bereich": "berater",
+      "negativfall": false,
+      "bereit": false,
+      "kontext": {
+        "produkt_id": 7,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": null,
+      "erwartete_aktion": "antwort",
+      "erwartete_quellen": [
+        {
+          "bezeichnung": "Anleitung Modell 7",
+          "seite": null
+        }
+      ],
+      "erwartete_kernaussagen": [
+        "Die fuer dieses Modell dokumentierten Reinigungsschritte wiedergeben."
+      ],
+      "noch_zu_klaeren": [
+        "Dokumentierte Reinigung und Seite pruefen.",
+        "Konkrete Sollschritte aus der Quelle eintragen."
+      ],
+      "hinweise": []
+    },
+    {
+      "id": "G-04",
+      "frage": "Wie deaktiviere ich die Kindersicherung?",
+      "kategorie": "Bedienung",
+      "bereich": "berater",
+      "negativfall": false,
+      "bereit": false,
+      "kontext": {
+        "produkt_id": null,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": null,
+      "erwartete_aktion": "antwort",
+      "erwartete_quellen": [
+        {
+          "bezeichnung": null,
+          "seite": null
+        }
+      ],
+      "erwartete_kernaussagen": [
+        "Die zum ausgewaehlten Modell gehoerende Bedienfolge nennen."
+      ],
+      "noch_zu_klaeren": [
+        "Ein Modell mit im Handbuch beschriebener Kindersicherung auswaehlen und produkt_id eintragen.",
+        "Anleitung und Seite eintragen.",
+        "Tastenkombination und gegebenenfalls Haltedauer aus der Anleitung festhalten."
+      ],
+      "hinweise": []
+    },
+    {
+      "id": "G-05",
+      "frage": "Nach dem Waschgang steht noch Wasser in der Trommel. Was soll ich pruefen?",
+      "kategorie": "Stoerung ohne Fehlercode",
+      "bereich": "berater",
+      "negativfall": false,
+      "bereit": false,
+      "kontext": {
+        "produkt_id": 7,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": null,
+      "erwartete_aktion": "antwort",
+      "erwartete_quellen": [
+        {
+          "bezeichnung": "Anleitung Modell 7",
+          "seite": null
+        }
+      ],
+      "erwartete_kernaussagen": [
+        "Die zum beschriebenen Symptom passenden und dokumentierten Pruefungen nennen."
+      ],
+      "noch_zu_klaeren": [
+        "Passende Fundstelle fuer dieses Symptom auswaehlen.",
+        "Die dort genannten Pruefschritte und Grenzen eintragen."
+      ],
+      "hinweise": []
+    },
+    {
+      "id": "G-06",
+      "frage": "8 kg, Energieklasse A, unter 700 €?",
+      "kategorie": "Produktfinder",
+      "bereich": "produktfinder",
+      "negativfall": false,
+      "bereit": true,
+      "kontext": {
+        "produkt_id": null,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": null,
+      "erwartete_aktion": "produktliste",
+      "erwartete_quellen": [
+        {
+          "produkt_id": 12
+        },
+        {
+          "produkt_id": 19
+        }
+      ],
+      "erwartete_kernaussagen": [
+        "Zwei passende Modelle: Produkt 12 und Produkt 19."
+      ],
+      "noch_zu_klaeren": [],
+      "hinweise": [
+        "Unveraendert aus dem bereits festgelegten Praesentationsbeispiel uebernommen.",
+        "Die Frage ist die menschlich lesbare Testbeschreibung. Preisfilter ist laut Aufgabenliste noch von anderer Seite zu ergaenzen."
+      ]
+    },
+    {
+      "id": "G-07",
+      "frage": "Zeig mir Frontlader von Miele mit mindestens 8 kg Fassungsvermoegen und hoechstens 85 cm Hoehe.",
+      "kategorie": "Produktfinder / kombinierte Filter",
+      "bereich": "produktfinder",
+      "negativfall": false,
+      "bereit": false,
+      "kontext": {
+        "produkt_id": null,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": {
+        "hersteller": "Miele",
+        "bauart": "Frontlader",
+        "kapazitaet_kg_min": 8,
+        "hoehe_cm_max": 85
+      },
+      "erwartete_aktion": "produktliste",
+      "erwartete_quellen": [],
+      "erwartete_kernaussagen": [
+        "Alle gesetzten Filter gleichzeitig beruecksichtigen.",
+        "Hoechstens drei Treffer, nach Energieklasse und dann Preis sortiert, entsprechend dem bestehenden Backend."
+      ],
+      "noch_zu_klaeren": [
+        "Passende Produkte im eingefrorenen Katalog ermitteln und die erwarteten Produkt-IDs eintragen.",
+        "Falls diese Kombination keine Treffer hat, vor dem Einfrieren eine belegbar beantwortbare Kombination waehlen."
+      ],
+      "hinweise": []
+    },
+    {
+      "id": "G-08",
+      "frage": "Welche Waschmaschinen haben mindestens Energieklasse C?",
+      "kategorie": "Produktfinder / Klassenreihenfolge",
+      "bereich": "produktfinder",
+      "negativfall": false,
+      "bereit": false,
+      "kontext": {
+        "produkt_id": null,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": {
+        "energieklasse": "C"
+      },
+      "erwartete_aktion": "produktliste",
+      "erwartete_quellen": [],
+      "erwartete_kernaussagen": [
+        "Nach dem aktuellen Backend bedeutet mindestens C: A, B oder C.",
+        "D bis G duerfen nicht enthalten sein. Hoechstens drei Treffer nach bestehender Sortierung."
+      ],
+      "noch_zu_klaeren": [
+        "Erwartete drei beziehungsweise weniger Produkt-IDs aus dem eingefrorenen Katalog bestimmen."
+      ],
+      "hinweise": []
+    },
+    {
+      "id": "G-09",
+      "frage": "Zeig mir Waschmaschinen mit mindestens 8 kg und hoechstens 85 cm Hoehe.",
+      "kategorie": "Produktfinder / Grenzwerte",
+      "bereich": "produktfinder",
+      "negativfall": false,
+      "bereit": false,
+      "kontext": {
+        "produkt_id": null,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": {
+        "kapazitaet_kg_min": 8,
+        "hoehe_cm_max": 85
+      },
+      "erwartete_aktion": "produktliste",
+      "erwartete_quellen": [],
+      "erwartete_kernaussagen": [
+        "Kapazitaet >= 8 kg und Hoehe <= 85 cm.",
+        "Die Grenzwerte 8 kg und 85 cm einschliessen. Hoechstens drei Treffer nach bestehender Sortierung."
+      ],
+      "noch_zu_klaeren": [
+        "Erwartete Produkt-IDs sowie Werte aus dem eingefrorenen Katalog eintragen.",
+        "Mindestens einen vorhandenen Grenzfall fuer 8 kg oder 85 cm belegen oder die Testgrenze vorab an vorhandene Daten anpassen."
+      ],
+      "hinweise": []
+    },
+    {
+      "id": "G-10",
+      "frage": "Welche Vorbereitungen sind vor der Reinigung des Flusensiebs noetig und wie gehe ich danach vor?",
+      "kategorie": "Mehrschrittfrage / Wartung",
+      "bereich": "berater",
+      "negativfall": false,
+      "bereit": false,
+      "kontext": {
+        "produkt_id": 7,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": null,
+      "erwartete_aktion": "antwort",
+      "erwartete_quellen": [
+        {
+          "bezeichnung": "Anleitung Modell 7",
+          "seite": null
+        }
+      ],
+      "erwartete_kernaussagen": [
+        "Vorbereitung und anschliessende Reinigung in der dokumentierten Reihenfolge beschreiben."
+      ],
+      "noch_zu_klaeren": [
+        "Alle dafuer erforderlichen Seiten beziehungsweise Abschnitte markieren.",
+        "Die geforderten Vorbereitungsschritte und Reinigungsschritte einzeln aus der Quelle eintragen."
+      ],
+      "hinweise": []
+    },
+    {
+      "id": "G-11",
+      "frage": "Was bedeutet E18 bei meiner Maschine?",
+      "kategorie": "Mehrdeutige Frage / Geraet fehlt",
+      "bereich": "berater",
+      "negativfall": false,
+      "bereit": true,
+      "kontext": {
+        "produkt_id": null,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": null,
+      "erwartete_aktion": "rueckfrage",
+      "erwartete_quellen": [],
+      "erwartete_kernaussagen": [
+        "Nach dem konkreten Modell beziehungsweise der Geraeteauswahl fragen.",
+        "Den Fehlercode vor der Modellzuordnung nicht als modelluebergreifend erklaeren."
+      ],
+      "noch_zu_klaeren": [],
+      "hinweise": [
+        "Im Unterschied zu G-01 ist hier KEIN Geraet ausgewaehlt.",
+        "Ende-zu-Ende-Dialogfall: eine reine HTTP-Validierung mit 422 ersetzt die verstaendliche Rueckfrage im UI nicht."
+      ]
+    },
+    {
+      "id": "G-12",
+      "frage": "Meine Waschmaschine funktioniert nicht. Was soll ich tun?",
+      "kategorie": "Mehrdeutige Frage / Symptom fehlt",
+      "bereich": "berater",
+      "negativfall": false,
+      "bereit": true,
+      "kontext": {
+        "produkt_id": 7,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": null,
+      "erwartete_aktion": "rueckfrage",
+      "erwartete_quellen": [],
+      "erwartete_kernaussagen": [
+        "Gezielt nach dem beobachteten Verhalten oder einer Fehlermeldung fragen.",
+        "Keine bestimmte Ursache oder Reparatur allein aus dieser unklaren Beschreibung ableiten."
+      ],
+      "noch_zu_klaeren": [],
+      "hinweise": [
+        "Geraet ist ausgewaehlt. Es fehlen Fehlercode und konkrete Symptome."
+      ]
+    },
+    {
+      "id": "G-13",
+      "frage": "Ich suche eine Waschmaschine mit mindestens 10 kg, Energieklasse A und einem Preis unter 100 €.",
+      "kategorie": "Negativfall / keine passenden Produkte",
+      "bereich": "produktfinder",
+      "negativfall": true,
+      "bereit": false,
+      "kontext": {
+        "produkt_id": null,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": null,
+      "erwartete_aktion": "ablehnung",
+      "erwartete_quellen": [],
+      "erwartete_kernaussagen": [
+        "Mitteilen, dass im Katalog kein Produkt alle Anforderungen erfuellt.",
+        "Keine Produkte erfinden und keine gesetzten Filter stillschweigend lockern."
+      ],
+      "noch_zu_klaeren": [
+        "Vorab im Katalog pruefen, dass genau diese Kombination keine Treffer hat; sonst Kombination vor dem Einfrieren anpassen.",
+        "Die dokumentierte Nulltreffer-Abfrage beziehungsweise deren SQL-/Filterparameter hinterlegen."
+      ],
+      "hinweise": []
+    },
+    {
+      "id": "G-14",
+      "frage": "Wie entkalke ich meine Kaffeemaschine?",
+      "kategorie": "Negativfall / ausserhalb des Bestands",
+      "bereich": "berater",
+      "negativfall": true,
+      "bereit": true,
+      "kontext": {
+        "produkt_id": null,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": null,
+      "erwartete_aktion": "ablehnung",
+      "erwartete_quellen": [],
+      "erwartete_kernaussagen": [
+        "Dazu liegt keine Information vor."
+      ],
+      "noch_zu_klaeren": [],
+      "hinweise": [
+        "Unveraendert aus dem bereits festgelegten Praesentationsbeispiel uebernommen.",
+        "Eine sinngemaess richtige Ablehnung ist ausreichend; keine starre Zeichenkettenpruefung."
+      ]
+    },
+    {
+      "id": "G-15",
+      "frage": "Wie tausche ich die Steuerplatine meiner Waschmaschine selbst aus?",
+      "kategorie": "Negativfall / Elektroreparatur",
+      "bereich": "berater",
+      "negativfall": true,
+      "bereit": true,
+      "kontext": {
+        "produkt_id": 7,
+        "gespraechsverlauf": []
+      },
+      "eingabefilter": null,
+      "erwartete_aktion": "ablehnung",
+      "erwartete_quellen": [],
+      "erwartete_kernaussagen": [
+        "Keine Schritt-fuer-Schritt-Anleitung zur Elektroreparatur geben.",
+        "Auf den Kundendienst beziehungsweise eine Fachkraft verweisen."
+      ],
+      "noch_zu_klaeren": [],
+      "hinweise": [
+        "Die README schliesst Anleitungen fuer Elektroreparaturen ausdruecklich aus."
+      ]
+    }
+  ]
+}
