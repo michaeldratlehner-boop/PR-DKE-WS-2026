@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { sucheProdukte } from './api.js';
 import './Produktfinder.css';
 
 export default function Produktfinder({ setSeite }) {
@@ -28,11 +29,16 @@ export default function Produktfinder({ setSeite }) {
     }
 
     // Suchanfrage auslösen
-    function handleSearch(event) {
+    async function handleSearch(event) {
         event.preventDefault();
         setGesucht(true);
 
-        // Später: Filter an das FastAPI-Backend senden
+        try {
+            const antwort = await sucheProdukte(filter);
+            console.log("Antwort vom Backend:", antwort);
+        } catch (fehler) {
+            console.error("Suche fehlgeschlagen:", fehler);
+        }
     }
 
     return (
