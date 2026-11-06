@@ -55,33 +55,55 @@
     margin: 82px 0 94px;
 }
 
-/* Eingabeformular mit der gleichen Breite wie die Navigation*/
+/* Formular enthält beide Eingabebereiche */
 .wf-formular {
     width: 100%;
-    min-height: 145px;
-    margin: 0;
-    padding: 14px 15px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    min-height: 0;
+}
 
+/* Kleines Eingabefeld für Produkt-ID - bleib ev. nur vorübergehend*/
+.wf-produkt-id {
+    width: 75px;
+    height: 34px;
+    padding: 6px 10px;
+    border: 1px solid #aaa;
+    border-radius: 10px;
     background-color: white;
+    color: #111;
+    font-size: 12px;
+    font-family: inherit;
+}
+
+/* Großer Kasten für Wartungsfrage */
+.wf-fragenkasten {
+    width: 100%;
+    min-height: 160px;
+    padding: 14px 15px 12px;
     border: 1px solid #aaa;
     border-radius: 13px;
+    background-color: white;
 
     display: flex;
     flex-direction: column;
 }
 
-/* Großes Texteingabefeld */
+/* Texteingabefeld */
 .wf-eingabe {
     width: 100%;
-    min-height: 85px;
-    resize: vertical;
+    min-height: 90px;
+    flex: 1;
     border: none;
     outline: none;
     background: transparent;
-    color: black;
-    font-family: inherit;
+    resize: vertical;
     font-size: 14px;
-    flex: 1;
+    font-family: inherit;
 }
 
 /* Buttons im Formular */
@@ -194,7 +216,7 @@
 /* KI-Hinweis unten rechts */
 .wf-ki-hinweis {
     align-self: flex-end;
-    margin: 20px 0 0;
+    margin: 40px 0 0;
     font-size: 11px;
     color: #777;
     text-align: right;

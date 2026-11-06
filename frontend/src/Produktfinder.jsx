@@ -26,6 +26,7 @@ export default function Produktfinder({ setSeite }) {
     const [hinweis, setHinweis] = useState("");
     const [fehler, setFehler] = useState("");
 
+
     // Änderungen der Dropdowns speichern
     function handleChange(event) {
         const { name, value } = event.target;
@@ -41,11 +42,12 @@ export default function Produktfinder({ setSeite }) {
     // Suchanfrage auslösen
     async function handleSearch(event) {
         event.preventDefault();
-        setFehler("");
-        //setGesucht(true);
+                setFehler("");
 
         try {
+            //neue Anfrage ans FastAPI senden
             const antwort = await sucheProdukte(filter);
+            //Neue Ergebnisse speichern
             setTreffer(antwort.treffer);
             setHinweis(antwort.hinweis);
             //log eigentlich nicht mehr notwendig -> Für Nachvollziehbarkeit

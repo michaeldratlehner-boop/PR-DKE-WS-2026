@@ -10,11 +10,11 @@
 
 /* Äußerer Rahmen */
 .pf-rahmen {
-    max-width: 730px;
-    min-height: 520px;
+    max-width: 790px;
+    min-height: 590px;
     margin: 0 auto;
-    border: 1px solid #e5e7eb;
     padding: 27px 29px 40px;
+    border: none;
 }
 
 /* Navigation oben */
@@ -58,7 +58,7 @@
     background-color: #fff;
     border: 1px solid #e0e7f5;
     border-radius: 14px;
-    padding: 22px 10px;
+    padding: 24px 10px;
 }
 
 .pf-formular p {
@@ -106,13 +106,13 @@
 /* Ergebnisse */
 .pf-ergebnisse-titel {
     font-size: 19px;
-    margin: 20px 0 10px;
+    margin: 30px 0 30px;
 }
 
 .pf-ergebnisse {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 35px;
+    gap: 18px;
 }
 
 .pf-karte {
@@ -191,7 +191,7 @@
 /* KI-Hinweis unten rechts */
 .wf-ki-hinweis {
     align-self: flex-end;
-    margin: 20px 0 0;
+    margin: 40px 0 0;
     font-size: 11px;
     color: #777;
     text-align: right;
