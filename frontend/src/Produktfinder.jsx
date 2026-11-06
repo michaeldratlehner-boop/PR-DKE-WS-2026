@@ -24,6 +24,7 @@ export default function Produktfinder({ setSeite }) {
     // null = noch nicht gesucht, sonst die Liste der Treffer vom Backend
     const [treffer, setTreffer] = useState(null);
     const [hinweis, setHinweis] = useState("");
+    const [fehler, setFehler] = useState("");
 
     // Änderungen der Dropdowns speichern
     function handleChange(event) {
@@ -40,6 +41,7 @@ export default function Produktfinder({ setSeite }) {
     // Suchanfrage auslösen
     async function handleSearch(event) {
         event.preventDefault();
+        setFehler("");
         //setGesucht(true);
 
         try {
@@ -48,8 +50,12 @@ export default function Produktfinder({ setSeite }) {
             setHinweis(antwort.hinweis);
             //log eigentlich nicht mehr notwendig -> Für Nachvollziehbarkeit
             //console.log("Antwort vom Backend:", antwort);
-        } catch (fehler) {
-            console.error("Suche fehlgeschlagen:", fehler);
+        } catch (e) {
+            // alte Ergebnisse entfernen, damit keine veralteten Karten stehen bleiben
+            setTreffer(null);
+            setHinweis("");
+            setFehler(e.message);
+            //console.error("Suche fehlgeschlagen:", fehler);
         }
     }
 
@@ -191,6 +197,15 @@ export default function Produktfinder({ setSeite }) {
                             ))
                         )}
                     </div>
+
+                    {fehler && <p className="pf-fehler">{fehler}</p>}
+
+                    {treffer !== null && treffer.length === 0 && (
+                        <p className="pf-hinweis">
+                            Keine passende Waschmaschine gefunden!
+                            Versuche es mit weniger Filtern.
+                        </p>
+                    )}
 
                     {hinweis && <p className="pf-hinweis">{hinweis}</p>}
 

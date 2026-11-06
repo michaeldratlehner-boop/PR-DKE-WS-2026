@@ -19,15 +19,30 @@ export async function sucheProdukte(filter) {
         hoehe_cm_max: zahlAusText(filter.hoehe),
     };
 
-    const antwort = await fetch(`${API_URL}/produktfinder`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-    });
+    let antwort;
+    try {
+        antwort = await fetch(`${API_URL}/produktfinder`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+        });
+    } catch {
+        // fetch wirft nur, wenn gar keine Verbindung zustande kam
+        throw new Error("Der Server ist nicht erreichbar.");
+    }
 
     if (!antwort.ok) {
-        throw new Error(`Backend-Fehler ${antwort.status}`);
+        let text = `Backend-Fehler ${antwort.status}`;
+        try {
+            // das Backend schickt bei 503 einen lesbaren Text im Feld "detail"
+            const daten = await antwort.json();
+            if (typeof daten.detail === "string") text = daten.detail;
+        } catch {
+            /* keine JSON-Antwort, der Standardtext bleibt */
+        }
+        throw new Error(text);
     }
+
 
     return antwort.json();
 }

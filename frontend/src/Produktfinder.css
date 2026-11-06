@@ -176,6 +176,13 @@
         gap: 12px;
     }
 }
+
+.pf-fehler {
+    margin-top: 18px;
+    font-size: 13px;
+    color: #b00020;
+}
+
 /* Inhalt nimmt verfügbaren Platz ein */
 .wf-layout {
     flex: 1;
