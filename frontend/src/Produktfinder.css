@@ -117,8 +117,32 @@
 
 .pf-karte {
     background: #fff;
-    height: 198px;
+    min-height: 198px;
+    padding: 12px;
     border-radius: 14px;
+}
+
+.pf-karte-titel {
+    font-size: 14px;
+    margin: 0 0 10px;
+    text-align: left;
+}
+
+.pf-karte-daten {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 10px;
+    margin: 0;
+    font-size: 12px;
+    text-align: left;
+}
+
+.pf-karte-daten dt {
+    color: #666;
+}
+
+.pf-karte-daten dd {
+    margin: 0;
 }
 
 .pf-hinweis {
@@ -152,6 +176,13 @@
         gap: 12px;
     }
 }
+
+.pf-fehler {
+    margin-top: 18px;
+    font-size: 13px;
+    color: #b00020;
+}
+
 /* Inhalt nimmt verfügbaren Platz ein */
 .wf-layout {
     flex: 1;

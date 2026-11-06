@@ -1,6 +1,12 @@
 
 import { useState } from 'react';
+import { sucheProdukte } from './api.js';
 import './Produktfinder.css';
+
+// Zeigt einen Wert an oder einen Strich, wenn er in der Datenbank fehlt (null)
+function zeige(wert, einheit = "") {
+    return wert === null || wert === undefined ? "-" : `${wert}${einheit}`;
+}
 
 export default function Produktfinder({ setSeite }) {
 
@@ -13,7 +19,12 @@ export default function Produktfinder({ setSeite }) {
         hoehe: ""
     });
 
-    const [gesucht, setGesucht] = useState(false);
+    //const [gesucht, setGesucht] = useState(false);
+
+    // null = noch nicht gesucht, sonst die Liste der Treffer vom Backend
+    const [treffer, setTreffer] = useState(null);
+    const [hinweis, setHinweis] = useState("");
+    const [fehler, setFehler] = useState("");
 
     // Änderungen der Dropdowns speichern
     function handleChange(event) {
@@ -23,16 +34,29 @@ export default function Produktfinder({ setSeite }) {
             ...filter,
             [name]: value
         });
-
-        setGesucht(false);
+        //Delete
+        //setGesucht(false);
     }
 
     // Suchanfrage auslösen
-    function handleSearch(event) {
+    async function handleSearch(event) {
         event.preventDefault();
-        setGesucht(true);
+        setFehler("");
+        //setGesucht(true);
 
-        // Später: Filter an das FastAPI-Backend senden
+        try {
+            const antwort = await sucheProdukte(filter);
+            setTreffer(antwort.treffer);
+            setHinweis(antwort.hinweis);
+            //log eigentlich nicht mehr notwendig -> Für Nachvollziehbarkeit
+            //console.log("Antwort vom Backend:", antwort);
+        } catch (e) {
+            // alte Ergebnisse entfernen, damit keine veralteten Karten stehen bleiben
+            setTreffer(null);
+            setHinweis("");
+            setFehler(e.message);
+            //console.error("Suche fehlgeschlagen:", fehler);
+        }
     }
 
     return (
@@ -144,17 +168,46 @@ export default function Produktfinder({ setSeite }) {
                     </h2>
 
                     <div className="pf-ergebnisse">
-                        <div className="pf-karte"></div>
-                        <div className="pf-karte"></div>
-                        <div className="pf-karte"></div>
+                        {treffer === null ? (
+                            <>
+                                {/* Platzhalter vor der ersten Suche */}
+                                <div className="pf-karte"></div>
+                                <div className="pf-karte"></div>
+                                <div className="pf-karte"></div>
+                            </>
+                        ) : (
+                            treffer.map((p) => (
+                                <div className="pf-karte" key={p.produkt_id}>
+                                    <h3 className="pf-karte-titel">
+                                        {p.hersteller} {p.modell}
+                                    </h3>
+                                    <dl className="pf-karte-daten">
+                                        <dt>Bauart</dt>
+                                        <dd>{zeige(p.bauart)}</dd>
+                                        <dt>Kapazität</dt>
+                                        <dd>{zeige(p.kapazitaet_kg, " kg")}</dd>
+                                        <dt>Energieklasse</dt>
+                                        <dd>{zeige(p.energieklasse)}</dd>
+                                        <dt>Höhe</dt>
+                                        <dd>{zeige(p.hoehe_cm, " cm")}</dd>
+                                        <dt>Preis</dt>
+                                        <dd>{zeige(p.preis_eur, " €")}</dd>
+                                    </dl>
+                                </div>
+                            ))
+                        )}
                     </div>
 
-                    {gesucht && (
+                    {fehler && <p className="pf-fehler">{fehler}</p>}
+
+                    {treffer !== null && treffer.length === 0 && (
                         <p className="pf-hinweis">
-                            Die Filter wurden übernommen.
-                            Noch keine Daten vorhanden!!
+                            Keine passende Waschmaschine gefunden!
+                            Versuche es mit weniger Filtern.
                         </p>
                     )}
+
+                    {hinweis && <p className="pf-hinweis">{hinweis}</p>}
 
                 </div>
             </div>
