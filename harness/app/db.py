@@ -38,3 +38,16 @@ def finde_produkte(
 
     antwort = abfrage.order("energieklasse").order("preis_eur").limit(limit).execute()
     return antwort.data
+
+def suche_wartungs_chunks(frage: str, produkt_id: int, limit: int = 5) -> list[dict]:
+    """Sucht passende Absätze in der Datenbank (aktuell nur Volltextsuche)."""
+    # Da query_embedding noch None ist, nutzt suche_chunks nur den Volltext
+    antwort = _client.rpc(
+        "suche_chunks",
+        {
+            "query_text": frage,
+            "produkt_id": produkt_id,
+            "treffer_limit": limit
+        }
+    ).execute()
+    return antwort.data

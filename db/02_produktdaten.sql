@@ -1,7 +1,5 @@
 
--- ------------------------------------------------------------
--- 1. Neue Spalten aus dem EU-Energielabel (Verordnung 2019/2014)
--- ------------------------------------------------------------
+-- 1. Neue Spalten aus dem EU-Energielabel
 alter table public.produkt
   add column if not exists energie_kwh_100      numeric,  -- kWh je 100 Waschzyklen
   add column if not exists wasser_liter_zyklus  numeric,  -- Liter je Betriebszyklus
@@ -12,12 +10,7 @@ alter table public.produkt
   add column if not exists ean                  text;     -- eindeutige Artikelnummer
 
 
--- ------------------------------------------------------------
--- 2. Erlaubte Werte 
---
--- Ohne diese Regeln landet "A-30%" oder "A+++"
--- in der Spalte, und jeder Filter im Produktfinder geht ins Leere.
--- ------------------------------------------------------------
+-- 2. Nur A-G bzw. A-D erlauben, sonst landet Werbetext wie "A-30%" drin
 alter table public.produkt drop constraint if exists produkt_energieklasse_chk;
 alter table public.produkt add  constraint produkt_energieklasse_chk
   check (energieklasse is null or energieklasse ~ '^[A-G]$');
@@ -31,26 +24,17 @@ alter table public.produkt add  constraint produkt_geraeuschklasse_chk
   check (geraeuschklasse is null or geraeuschklasse ~ '^[A-D]$');
 
 
--- ------------------------------------------------------------
--- 3. Doppelung entfernen
---
--- Ein Datenblatt ist ein Dokument und gehoert damit in die Tabelle
--- "dokument" (typ = 'datenblatt'). Die Spalte produkt.datenblatt_url
--- haette dieselbe Information ein zweites Mal gespeichert.
--- ------------------------------------------------------------
+-- 3. datenblatt_url raus: ein Datenblatt ist ein Dokument und gehoert
+-- in die Tabelle dokument (typ = 'datenblatt').
 alter table public.produkt drop column if exists datenblatt_url;
 
 
--- ------------------------------------------------------------
 -- 4. Index fuer den Produktfinder
--- ------------------------------------------------------------
 create index if not exists produkt_energieklasse_idx
   on public.produkt (energieklasse);
 
 
--- ------------------------------------------------------------
 -- 5. Kontrolle
--- ------------------------------------------------------------
 select column_name, data_type
 from information_schema.columns
 where table_schema = 'public' and table_name = 'produkt'

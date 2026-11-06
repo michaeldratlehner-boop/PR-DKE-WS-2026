@@ -2,25 +2,6 @@
 Liest die technischen Daten aus den Produktblaettern und ergaenzt damit
 die Tabelle "produkt".
 
-Ablauf:
-  1. Aus der DB holen, welche Dokumente es gibt
-  2. Die PDFs aus dem Storage-Bucket herunterladen
-  3. Werte per Suchmuster herausziehen
-  4. Tabelle zum Gegenpruefen ausgeben
-  5. NUR mit --schreiben die Werte wirklich in die DB schreiben
-
-
-WICHTIG - warum zwei Quellen getrennt behandelt werden:
-  Die Energieklasse wird AUSSCHLIESSLICH aus dem Produktblatt gelesen.
-  In Bedienungsanleitungen steht unter "Energieeffizienzklasse" naemlich
-  die Klasse der TROMMELBELEUCHTUNG (Miele: E, Siemens: F) - nicht die
-  der Waschmaschine. 
-
-Aufruf:
-    cd ~/Uni/GitHub/PR-DKE-WS-2026
-    source .venv/bin/activate
-    python3 scripts/produktdaten_auslesen.py              # nur anzeigen
-    python3 scripts/produktdaten_auslesen.py --schreiben  # und speichern
 """
 
 import argparse
@@ -36,21 +17,13 @@ from dotenv import load_dotenv
 from pypdf import PdfReader
 from supabase import create_client
 
-# pypdf meldet bei Herstellerschriften viele harmlose Warnungen. Die
-# blenden wir aus, damit die Ausgabe lesbar bleibt.
+# pypdf warnt bei Herstellerschriften staendig, das stoert nur
 logging.getLogger("pypdf").setLevel(logging.ERROR)
 warnings.filterwarnings("ignore")
 
 
-# ---------------------------------------------------------------------------
-# Suchmuster
-#
-# Jeder Eintrag ist eine Liste von Alternativen, die der Reihe nach probiert
-# werden - die erste, die passt, gewinnt. Mehrere Muster sind noetig, weil
-# jeder Hersteller dieselbe Angabe anders schreibt:
-#   Miele:   "Gewichteter Wasserverbrauch pro Betriebszyklus in l 47"
-#   Siemens: "Wasserverbrauch ... (EU 2017/1369): 46 l"
-# ---------------------------------------------------------------------------
+# Pro Feld mehrere Muster, weil jeder Hersteller anders schreibt.
+# Das erste, das passt, gewinnt.
 MUSTER_DATENBLATT = {
     "energieklasse": [
         r"Energie[-\s]?Effizienzklasse\s*(?:\(A\s*[–\-]\s*G\))?\s*[¹1]?\s*:?\s*([A-G])(?![A-Za-z])",
@@ -104,11 +77,7 @@ MUSTER_MASSE = {
 
 
 def normalisieren(text: str) -> str:
-    """Macht den PDF-Text durchsuchbar.
-
-    PDFs enthalten harte Zeilenumbrueche und Fuellpunkte ("Klasse: ..... A").
-    Beides wuerde die Suchmuster zerreissen, darum raeumen wir vorher auf.
-    """
+    """Raeumt Zeilenumbrueche und Fuellpunkte weg, sonst brechen die Muster."""
     text = text.replace("\n", " ")
     text = re.sub(r"\.{2,}", " ", text)    # Fuellpunkte entfernen
     return re.sub(r"\s+", " ", text)       # Mehrfach-Leerzeichen zusammenziehen
@@ -133,7 +102,7 @@ def werte_auslesen(text_datenblatt: str, text_anleitung: str) -> dict:
     werte = {}
 
     for feld, muster in MUSTER_DATENBLATT.items():
-        # Diese Felder kommen NUR aus dem Produktblatt (siehe Kopfkommentar).
+        # nur aus dem Datenblatt, nie aus der Anleitung
         gefunden = suchen(text_datenblatt, muster)
         if gefunden is not None:
             werte[feld] = gefunden
@@ -184,7 +153,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--schreiben",
-        action="store_true",   # Schalter ohne Wert: entweder gesetzt oder nicht
+        action="store_true",
         help="Werte wirklich in die Datenbank schreiben (sonst nur anzeigen)",
     )
     args = parser.parse_args()
@@ -197,8 +166,7 @@ def main() -> None:
     client = create_client(url, key)
     bucket = os.getenv("SUPABASE_BUCKET", "anleitungen")
 
-    # Alle Produkte mit ihren Dokumenten holen. Das verschachtelte
-    # "dokument(...)" ist ein JOIN, den Supabase automatisch baut.
+    # dokument(...) ist ein JOIN, den Supabase selbst baut
     produkte = (
         client.table("produkt")
         .select("id, hersteller, modell, dokument(id, typ, datei_pfad)")
