@@ -52,6 +52,7 @@ def suche_wartungs_chunks(
         {
             "query_text": frage,
             "produkt_id": produkt_id,
+            "query_embedding": embedding,
             "treffer_limit": limit
         }
     ).execute()
