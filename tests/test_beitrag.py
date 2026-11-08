@@ -32,18 +32,19 @@ class EmbeddingTests(unittest.TestCase):
         self.antwort = SimpleNamespace(embeddings=[SimpleNamespace(values=self.vektor)])
         self.sync = Mock(return_value=self.antwort)
         self.asynchron = AsyncMock(return_value=self.antwort)
-        self.textantwort = Mock(return_value=SimpleNamespace(text="Testantwort"))
+        self.textantwort = AsyncMock(return_value=SimpleNamespace(text="Testantwort"))
         self.settings = SimpleNamespace(
             gemini_api_key="nur-fuer-den-lokalen-test",
             gemini_model="antwortmodell-test",
             gemini_embedding_model="gemini-embedding-2",
+            fallback_models=["ersatz-test"], default_system_prompt="Standard",
         )
         client = SimpleNamespace(
             models=SimpleNamespace(
                 embed_content=self.sync,
                 generate_content=self.textantwort,
             ),
-            aio=SimpleNamespace(models=SimpleNamespace(embed_content=self.asynchron)),
+            aio=SimpleNamespace(models=SimpleNamespace(embed_content=self.asynchron, generate_content=self.textantwort)),
         )
 
         # Die echte llm.py wird ausgefuehrt. Nur SDK und Konfiguration werden
@@ -57,6 +58,8 @@ class EmbeddingTests(unittest.TestCase):
         typen_modul.GenerateContentConfig = lambda **werte: SimpleNamespace(**werte)
         genai_modul.Client = Mock(return_value=client)
         genai_modul.types = typen_modul
+        self.api_fehler = type("APIError", (Exception,), {})
+        genai_modul.errors = SimpleNamespace(APIError=self.api_fehler)
         google_modul.genai = genai_modul
 
         app_modul = ModuleType("app")
@@ -71,20 +74,38 @@ class EmbeddingTests(unittest.TestCase):
             "google.genai.types": typen_modul,
             "app": app_modul,
             "app.config": config_modul,
+            "app.traces": traces,
         }):
             self.namespace = runpy.run_path(str(ROOT / "harness/app/llm.py"))
 
-    def test_bisherige_antwortgenerierung_und_systemprompt(self):
-        ergebnis = self.namespace["generiere_antwort"]("Testfrage", "Systemtext")
-        self.assertEqual(ergebnis, "Testantwort")
+    def test_wartungsantwort_uebernimmt_kontext_und_quellenpflicht(self):
+        ergebnis = asyncio.run(self.namespace['generiere_wartungsantwort'](
+            'Testfrage', [{'inhalt': 'Nur diese Testinformation.', 'seite': 8, 'abschnitt': 'Test'}],
+        ))
+        self.assertEqual(ergebnis, 'Testantwort')
         parameter = self.textantwort.call_args.kwargs
-        self.assertEqual(parameter["model"], "antwortmodell-test")
-        self.assertEqual(parameter["contents"], "Testfrage")
-        self.assertEqual(parameter["config"].system_instruction, "Systemtext")
+        self.assertEqual(parameter['model'], 'antwortmodell-test')
+        self.assertIn('Nur diese Testinformation.', parameter['contents'])
+        self.assertIn('Seite: 8', parameter['contents'])
+        self.assertIn('ausschließlich', parameter['config'].system_instruction)
 
-    def test_leere_textantwort(self):
+    def test_leere_wartungsantwort_wird_zu_weiss_ich_nicht(self):
         self.textantwort.return_value = SimpleNamespace(text=None)
-        self.assertEqual(self.namespace["generiere_antwort"]("Testfrage"), "")
+        self.assertEqual(asyncio.run(self.namespace['generiere_wartungsantwort']('Frage', [])), 'weiß ich nicht')
+
+    def test_wartungsfallback_wird_im_trace_erfasst(self):
+        self.textantwort.side_effect = [self.api_fehler(), SimpleNamespace(text='Testantwort')]
+        with tempfile.TemporaryDirectory() as ordner:
+            with traces.trace_lauf('Frage', verzeichnis=ordner) as lauf:
+                asyncio.run(self.namespace['generiere_wartungsantwort']('Frage', [], lauf=lauf))
+            self.assertEqual(lauf['modell'], 'ersatz-test')
+            self.assertEqual([x['status'] for x in lauf['modell_versuche']], ['fehler', 'ok'])
+            self.assertIn('system', lauf['finaler_prompt'])
+
+    def test_alle_wartungsmodelle_fehlschlagen_ist_fehler(self):
+        self.textantwort.side_effect = self.api_fehler()
+        with self.assertRaises(self.namespace['WartungsmodellFehler']):
+            asyncio.run(self.namespace['generiere_wartungsantwort']('Frage', []))
 
     def test_frage_768_zahlen_und_eigenes_modell(self):
         self.settings.gemini_model = "anderes-sprachmodell"

@@ -48,7 +48,7 @@ def suche_wartungs_chunks(
     """Sucht passende Absätze in der Datenbank."""
     # query_embedding wird jetzt mit übergeben
     antwort = _client.rpc(
-        "suche_chunks",
+        "suche_chunks_hybrid",
         {
             "query_text": frage,
             "produkt_id": produkt_id,
@@ -56,4 +56,4 @@ def suche_wartungs_chunks(
             "treffer_limit": limit
         }
     ).execute()
-    return antwort.data
+    return antwort.data or []

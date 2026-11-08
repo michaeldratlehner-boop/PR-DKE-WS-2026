@@ -1,4 +1,6 @@
+from contextlib import nullcontext
 from math import isfinite
+from app.traces import modellversuch
 from numbers import Real
 from typing import Literal
 
@@ -150,9 +152,14 @@ async def generiere_antwort_async_stream(prompt: str, system: str | None = None)
     yield "Entschuldigung, derzeit sind alle KI-Modelle überlastet. Bitte versuche es später noch einmal."
 
 
-async def generiere_wartungsantwort(frage: str, absaetze: list[dict]) -> str:
-    """Baut den Kontext auf und holt die Antwort von Gemini."""
+class WartungsmodellFehler(RuntimeError):
+    """Keines der konfigurierten Antwortmodelle konnte antworten."""
 
+
+async def generiere_wartungsantwort(
+    frage: str, absaetze: list[dict], *, lauf: dict | None = None,
+) -> str:
+    """Bestehender Wartungsprompt und Fallback, mit optionalem JSONL-Trace."""
     # System-Prompt exakt nach den Vorgaben aus dem Dokument "Durchstich 10. November"
     wartung_system_prompt = """Du bist ein technischer Wartungsberater für Haushaltsgeräte.
 BEFOLGE DIESE REGELN STRIKT:
@@ -172,22 +179,22 @@ BEFOLGE DIESE REGELN STRIKT:
     # Die finale Nachricht an das LLM
     finaler_prompt = f"{kontext_text}\n\nFRAGE DES NUTZERS:\n{frage}"
 
-    # Liste aus dem Hauptmodell und den Fallbacks erstellen
-    modelle_zum_testen = [settings.gemini_model] + settings.fallback_models
 
-    # Fallback-Schleife abarbeiten
-    for model_name in modelle_zum_testen:
+    if lauf is not None:
+        lauf['finaler_prompt'] = {'system': wartung_system_prompt, 'user': finaler_prompt}
+    for model_name in dict.fromkeys([settings.gemini_model] + settings.fallback_models):
+        versuch_kontext = modellversuch(lauf, model_name) if lauf is not None else nullcontext()
         try:
-            antwort = await _client.aio.models.generate_content(
-                model=model_name,
-                contents=finaler_prompt,
-                config=types.GenerateContentConfig(system_instruction=wartung_system_prompt),
-            )
-            return antwort.text or "weiß ich nicht"
-
-        except errors.APIError as e:
-            # Fehler in der Konsole loggen und zum nächsten Modell springen
-            print(f"Warnung: Modell {model_name} fehlgeschlagen beim Wartungsassistenten ({e}). Wechsle...")
+            with versuch_kontext as versuch:
+                antwort = await _client.aio.models.generate_content(
+                    model=model_name, contents=finaler_prompt,
+                    config=types.GenerateContentConfig(system_instruction=wartung_system_prompt),
+                )
+                usage = getattr(antwort, 'usage_metadata', None)
+                if versuch is not None and usage is not None and hasattr(usage, 'model_dump'):
+                    versuch['tokenverbrauch'] = usage.model_dump(mode='json', exclude_none=True)
+                    lauf['tokenverbrauch'] = versuch['tokenverbrauch']
+                return antwort.text or 'weiß ich nicht'
+        except errors.APIError:
             continue
-
-    return "Entschuldigung, derzeit sind alle KI-Modelle überlastet. Bitte versuche es später noch einmal."
+    raise WartungsmodellFehler('Alle konfigurierten Antwortmodelle fehlgeschlagen.')
