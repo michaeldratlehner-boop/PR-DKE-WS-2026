@@ -63,6 +63,7 @@ class Quelle(BaseModel):
     abschnitt: str | None = None
 
 class WartungAntwort(BaseModel):
+    trace_id: str | None = None
     # "rueckfrage": Gerät noch unklar, antwort enthält die Frage an den Nutzer
     # art: Literal["antwort", "rueckfrage"] = "antwort"
     antwort: str

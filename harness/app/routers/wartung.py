@@ -1,51 +1,112 @@
+import asyncio
 import logging
-from fastapi import APIRouter,HTTPException
-from app.schemas import Quelle, WartungAnfrage, WartungAntwort
+
+from fastapi import APIRouter, HTTPException
+
+from app.config import settings
 from app.db import suche_wartungs_chunks
-from app.llm import generiere_wartungsantwort
+from app.llm import generiere_embedding_async, generiere_wartungsantwort
+from app.schemas import Quelle, WartungAnfrage, WartungAntwort
+from app.traces import trace_lauf
+
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["Wartung"])
 
 
+def sammle_quellen(absaetze: list[dict]) -> list[Quelle]:
+    """Übernimmt die Quellen der Suchtreffer und entfernt doppelte Einträge."""
+    quellen = []
+    gesehen = set()
+
+    for absatz in absaetze:
+        seite = absatz.get("seite")
+        abschnitt = absatz.get("abschnitt")
+        schluessel = (seite, abschnitt)
+
+        if schluessel in gesehen:
+            continue
+
+        gesehen.add(schluessel)
+        quellen.append(Quelle(seite=seite, abschnitt=abschnitt))
+
+    return quellen
+
+
 @router.post("/wartung", response_model=WartungAntwort)
 async def wartung(anfrage: WartungAnfrage) -> WartungAntwort:
-    """Beantwortet eine Wartungsfrage anhand der Dokumenten-Chunks."""
+    """Erzeugt eine Antwort anhand der Anleitung des ausgewählten Geräts."""
     try:
-        # 1. Chunks aus der Datenbank holen (aktuell über Volltext)
-        # TODO: Später hier Embedding berechnen und an suche_wartungs_chunks übergeben
-        gefundene_absaetze = suche_wartungs_chunks(anfrage.frage, anfrage.produkt_id)
+        with trace_lauf(
+            anfrage.frage,
+            produkt_id=anfrage.produkt_id,
+        ) as lauf:
 
-        # 2. Wenn keine Absätze gefunden wurden
-        if not gefundene_absaetze:
-            return WartungAntwort(
-                antwort="weiß ich nicht (Keine passenden Absätze in der Anleitung gefunden)",
-                quellen=[]
+            # 1. Frage in einen Embedding-Vektor umwandeln.
+            lauf["embedding_modell"] = settings.gemini_embedding_model
+            lauf["embedding_dimensionen"] = 768
+
+            embedding = await generiere_embedding_async(
+                anfrage.frage,
+                art="frage",
             )
 
-        # 3. Antwort über Gemini generieren
-        antwort_text = await generiere_wartungsantwort(anfrage.frage, gefundene_absaetze)
+            # 2. Passende Textstellen zum ausgewählten Gerät suchen.
+            # Der synchrone Datenbankzugriff läuft in einem separaten Thread.
+            absaetze = await asyncio.to_thread(
+                suche_wartungs_chunks,
+                frage=anfrage.frage,
+                produkt_id=anfrage.produkt_id,
+                embedding=embedding,
+            )
 
-        # 4. Quellen für die Rückgabe aufbereiten
-        quellen = [
-            Quelle(seite=chunk["seite"], abschnitt=chunk["abschnitt"])
-            for chunk in gefundene_absaetze
-        ]
+            # 3. Suchaufruf und Treffer im Trace speichern.
+            lauf["retrieval_treffer"] = absaetze
+            lauf["tool_aufrufe"].append({
+                "name": "suche_chunks_hybrid",
+                "parameter": {
+                    "query_text": anfrage.frage,
+                    "produkt_id": anfrage.produkt_id,
+                    "treffer_limit": 5,
+                },
+                "treffer_anzahl": len(absaetze),
+            })
 
-        # 5. Traces wegschreiben (wie im Dokument gefordert)
-        trace_daten = {
-            "frage": anfrage.frage,
-            "produkt_id": anfrage.produkt_id,
-            "treffer_anzahl": len(gefundene_absaetze),
-            "chunks": [{"rang": c["fts_rang"], "score": c["fts_score"], "seite": c["seite"]} for c in gefundene_absaetze]
-        }
-        logger.info(f"TRACE - Wartungsanfrage: {trace_daten}")
+            # 4. Nur bei vorhandenen Treffern das Antwortmodell aufrufen.
+            text = "weiß ich nicht"
 
-        return WartungAntwort(antwort=antwort_text, quellen=quellen)
+            if absaetze:
+                text = await generiere_wartungsantwort(
+                    anfrage.frage,
+                    absaetze,
+                    lauf=lauf,
+                )
 
-    except Exception as e:
-        logger.exception("Wartungssuche fehlgeschlagen")
+            normalisierter_text = text.strip().rstrip(".!?").casefold()
+            gefunden = normalisierter_text not in (
+                "weiß ich nicht",
+                "weiss ich nicht",
+            )
+
+            quellen = []
+            if gefunden:
+                quellen = sammle_quellen(absaetze)
+
+            # 5. API-Antwort erstellen und im Trace speichern.
+            antwort = WartungAntwort(
+                antwort=text,
+                quellen=quellen,
+                gefunden=gefunden,
+                trace_id=lauf["trace_id"],
+            )
+
+            lauf["ausgabe"] = antwort.model_dump(mode="json")
+            return antwort
+
+    except Exception:
+        logger.exception("Wartungsanfrage fehlgeschlagen")
+
         raise HTTPException(
             status_code=503,
-            detail=f"Der Wartungsassistent ist derzeit nicht erreichbar: {e}",
-        )
+            detail="Der Wartungsassistent ist derzeit nicht erreichbar.",
+        ) from None

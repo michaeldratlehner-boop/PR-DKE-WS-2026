@@ -1,4 +1,6 @@
+from contextlib import nullcontext
 from math import isfinite
+from app.traces import modellversuch
 from numbers import Real
 from typing import Literal
 
@@ -150,44 +152,75 @@ async def generiere_antwort_async_stream(prompt: str, system: str | None = None)
     yield "Entschuldigung, derzeit sind alle KI-Modelle überlastet. Bitte versuche es später noch einmal."
 
 
-async def generiere_wartungsantwort(frage: str, absaetze: list[dict]) -> str:
-    """Baut den Kontext auf und holt die Antwort von Gemini."""
+class WartungsmodellFehler(RuntimeError):
+    """Keines der konfigurierten Antwortmodelle konnte antworten."""
 
-    # System-Prompt exakt nach den Vorgaben aus dem Dokument "Durchstich 10. November"
-    wartung_system_prompt = """Du bist ein technischer Wartungsberater für Haushaltsgeräte.
+
+async def generiere_wartungsantwort(
+    frage: str,
+    absaetze: list[dict],
+    *,
+    lauf: dict | None = None,
+) -> str:
+    """Erzeugt eine quellengebundene Antwort mit Fallback und optionalem Trace."""
+
+    system_prompt = """Du bist ein technischer Wartungsberater für Haushaltsgeräte.
 BEFOLGE DIESE REGELN STRIKT:
 1. Du darfst ausschließlich aus den übergebenen Absätzen antworten.
 2. Wenn die Antwort nicht in den Absätzen steht, antworte exakt mit: 'weiß ich nicht'. Du darfst nicht raten!
 3. SICHERHEITSREGEL: Bei Elektroreparaturen darfst du keine Anleitung geben, sondern musst auf den Kundendienst verweisen.
 4. Du musst die Quelle (Seite und Abschnitt) in deine Antwort übernehmen (z.B. 'laut Seite 34, Abschnitt Störungen')."""
 
-    # Kontext aus den Datenbank-Chunks bauen
-    kontext_text = "HIER SIND DIE AUSZÜGE AUS DER BEDIENUNGSANLEITUNG:\n\n"
+    # Gefundene Textstellen als Kontext zusammenstellen.
+    kontext = []
     for chunk in absaetze:
         seite = chunk.get("seite", "Unbekannt")
         abschnitt = chunk.get("abschnitt", "Unbekannt")
         inhalt = chunk.get("inhalt", "")
-        kontext_text += f"--- Seite: {seite} | Abschnitt: {abschnitt} ---\n{inhalt}\n\n"
 
-    # Die finale Nachricht an das LLM
-    finaler_prompt = f"{kontext_text}\n\nFRAGE DES NUTZERS:\n{frage}"
+        kontext.append(
+            f"--- Seite: {seite} | Abschnitt: {abschnitt} ---\n{inhalt}"
+        )
 
-    # Liste aus dem Hauptmodell und den Fallbacks erstellen
-    modelle_zum_testen = [settings.gemini_model] + settings.fallback_models
+    prompt = (
+        "HIER SIND DIE AUSZÜGE AUS DER BEDIENUNGSANLEITUNG:\n\n"
+        + "\n\n".join(kontext)
+        + f"\n\nFRAGE DES NUTZERS:\n{frage}"
+    )
 
-    # Fallback-Schleife abarbeiten
-    for model_name in modelle_zum_testen:
+    # Vollständigen Prompt für die Evaluierung speichern.
+    if lauf is not None:
+        lauf["finaler_prompt"] = {
+            "system": system_prompt,
+            "user": prompt,
+        }
+
+    # Hauptmodell zuerst, anschließend Fallbacks; keine doppelten Aufrufe.
+    modelle = dict.fromkeys(
+        [settings.gemini_model] + settings.fallback_models
+    )
+
+    for modell in modelle:
+        if lauf is not None:
+            protokoll = modellversuch(lauf, modell)
+        else:
+            protokoll = nullcontext()
+
         try:
-            antwort = await _client.aio.models.generate_content(
-                model=model_name,
-                contents=finaler_prompt,
-                config=types.GenerateContentConfig(system_instruction=wartung_system_prompt),
-            )
-            return antwort.text or "weiß ich nicht"
+            with protokoll:
+                antwort = await _client.aio.models.generate_content(
+                    model=modell,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        system_instruction=system_prompt
+                    ),
+                )
 
-        except errors.APIError as e:
-            # Fehler in der Konsole loggen und zum nächsten Modell springen
-            print(f"Warnung: Modell {model_name} fehlgeschlagen beim Wartungsassistenten ({e}). Wechsle...")
+                return antwort.text or "weiß ich nicht"
+
+        except errors.APIError:
             continue
 
-    return "Entschuldigung, derzeit sind alle KI-Modelle überlastet. Bitte versuche es später noch einmal."
+    raise WartungsmodellFehler(
+        "Alle konfigurierten Antwortmodelle fehlgeschlagen."
+    )
