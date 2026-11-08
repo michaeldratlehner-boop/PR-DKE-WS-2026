@@ -118,8 +118,8 @@ Die SQL-Dateien werden im **SQL Editor des Supabase-Dashboards** ausgeführt.
 
 | Ausgangslage | Vorgehen |
 |---|---|
-| Leere Datenbank | `db/schema.sql`, dann `db/03_suche_chunks.sql` |
-| Bestehende Datenbank | `01_anpassungen.sql`, `02_produktdaten.sql`, `03_suche_chunks.sql` |
+| Leere Datenbank | `db/schema.sql`, dann `db/03_suche_chunks.sql`, anschließend `db/04_hybride_suche.sql` |
+| Bestehende Datenbank | `01_anpassungen.sql`, `02_produktdaten.sql`, `03_suche_chunks.sql`, anschließend `04_hybride_suche.sql` |
 
 `schema.sql` nutzt `create table if not exists` und überspringt damit vorhandene
 Tabellen. Die Migrationen holen nach, was dadurch nicht angewendet wird:
@@ -130,6 +130,9 @@ Tabellen. Die Migrationen holen nach, was dadurch nicht angewendet wird:
   Prüfregeln auf den Effizienzklassen, Entfernen des doppelten
   `produkt.datenblatt_url`.
 - **`03_suche_chunks.sql`** — die Suchfunktion, siehe unten.
+- **`04_hybride_suche.sql`** — ergänzt die produktbezogene Volltext- und
+  Vektorsuche `suche_chunks_hybrid` mit Reciprocal Rank Fusion (RRF).
+  Die bisherige Funktion `suche_chunks` bleibt erhalten.
 
 01 und 02 sind bereits angewendet und stehen nur noch als Nachweis im Repo.
 
@@ -183,10 +186,63 @@ anzulegen.
 `chunks_erstellen.py` lässt `embedding` leer — dafür braucht es den Gemini-Key.
 Die Spalte `fts` füllt Postgres selbst, die Volltextsuche funktioniert also sofort.
 
-## Suchfunktion `suche_chunks`
+### Embeddings ergänzen
+
+Nach dem Chunking erzeugt `scripts/embeddings_ergaenzen.py` die fehlenden
+Embeddings mit `gemini-embedding-2`. Pro Chunk werden 768 Werte gespeichert.
+Das Antwortmodell und das Embedding-Modell werden getrennt konfiguriert.
+
+In der lokalen `.env` müssen folgende Werte gesetzt sein:
+
+```dotenv
+GEMINI_API_KEY=<eigener API-Schlüssel>
+GEMINI_EMBEDDING_MODEL=gemini-embedding-2
+```
+
+Die Zugangsdaten gehören ausschließlich ins Backend beziehungsweise in lokale
+Skripte. Die `.env` wird nicht committet.
+
+```bash
+# Vorschau: keine Gemini-Aufrufe und keine Datenbankänderungen
+python scripts/embeddings_ergaenzen.py --produkt-id 1
+
+# Optional: zunächst nur zwei Chunks speichern
+python scripts/embeddings_ergaenzen.py --produkt-id 1 --limit 2 --schreiben
+
+# Alle noch fehlenden Embeddings für das gewählte Gerät speichern
+python scripts/embeddings_ergaenzen.py --produkt-id 1 --schreiben
+```
+
+`produkt-id` bezeichnet die Datenbank-ID, nicht die Anzahl der Produkte.
+Im aktuell getesteten Bestand gilt: Miele = 1, Siemens = 3.
+
+Das Skript verarbeitet nur Chunks ohne Embedding. Bereits gespeicherte
+Embeddings werden übersprungen. Nach einer Unterbrechung kann derselbe Befehl
+erneut ausgeführt werden. Bereits gespeicherte Ergebnisse bleiben erhalten.
+Bei Bedarf lässt sich mit `--pause 15` eine Pause von 15 Sekunden zwischen
+den Verarbeitungen einstellen.
+
+Nach dem Import neuer Dokumente ist dieser Schritt ebenfalls erforderlich.
+`chunks_erstellen.py` nicht nur zum Ergänzen von Embeddings erneut ausführen:
+Es ersetzt vorhandene Chunks des jeweiligen Dokuments.
+
+### Embedding-Funktion separat testen
+
+Mit aktiver virtueller Umgebung im Projekt-Hauptordner:
+
+```bash
+python scripts/test_embedding_live.py --live --asynchron
+```
+
+Der Test führt einen echten API-Aufruf aus und prüft, ob genau 768 gültige
+Zahlen zurückgegeben werden. Er prüft noch nicht die fachliche Suchqualität.
+
+## Bisherige Suchfunktion `suche_chunks`
 
 Sucht die Absätze aus der Anleitung, die zu einer Frage passen — eingegrenzt auf
-ein Gerät. Das Backend ruft sie auf und gibt die Treffer als Kontext ans LLM.
+ein Gerät. Diese bestehende Funktion bleibt als Volltextsuche erhalten.
+Der angebundene Wartungs-Endpunkt verwendet jetzt `suche_chunks_hybrid`
+(siehe nächster Abschnitt).
 
 ```python
 client.rpc("suche_chunks", {
@@ -216,31 +272,191 @@ client.rpc("suche_chunks", {
 | `fts_rang` | Platz in der Trefferliste, 1 ist der beste |
 | `fts_score` | Punktwert der Volltextsuche, für die Traces |
 
-**Derzeit nur Volltextsuche.** Die Wörter der Frage werden mit ODER verknüpft, nicht
+**Diese Funktion verwendet nur Volltextsuche.** Die Wörter der Frage werden mit ODER verknüpft, nicht
 mit UND — sonst müsste ein Absatz alle Wörter enthalten und ganze Sätze fänden nie
-etwas. Ganze Sätze treffen damit trotzdem ungenau; dafür kommt später die
-Vektorsuche dazu. Die Signatur bleibt dann gleich.
+etwas. Ganze Sätze treffen damit trotzdem ungenau; die ergänzte Funktion
+`suche_chunks_hybrid` kombiniert deshalb Volltext- und Vektorsuche.
 
 Findet die Suche nichts Passendes, kommen trotzdem Absätze zurück — die Funktion
 sortiert nach Worttreffern, nicht nach Sinn. Das Aussortieren macht der Prompt:
 Steht die Antwort nicht in den Absätzen, muss das LLM „weiß ich nicht" sagen.
 
+## Hybride Suche und Anbindung an den Wartungs-Endpunkt
+
+`suche_chunks_hybrid` kombiniert deutsche Volltextsuche und Vektorsuche mit
+Cosine-Distanz. Beide Ranglisten werden mittels Reciprocal Rank Fusion (RRF)
+zusammengeführt. Beide Suchwege sind auf die übergebene `produkt_id`
+eingeschränkt. Standardmäßig werden bis zu fünf Treffer zurückgegeben.
+
+Die Funktion wird über den Backend-Supabase-Client aufgerufen:
+
+```python
+# frage_embedding ist der zuvor erzeugte Vektor mit 768 Werten.
+client.rpc("suche_chunks_hybrid", {
+    "query_text": frage,
+    "produkt_id": produkt_id,
+    "query_embedding": frage_embedding,
+    "treffer_limit": 5,
+}).execute()
+```
+
+Ohne Frage-Embedding (`query_embedding=None`) arbeitet diese Funktion nur
+mit Volltextsuche.
+
+| Rückgabefeld | Bedeutung |
+|---|---|
+| `chunk_id`, `inhalt` | Identifikation und Text des Treffers |
+| `seite`, `abschnitt` | Quellenangabe |
+| `dokument_id`, `datei_pfad` | Zuordnung zum Originaldokument |
+| `fts_rang`, `fts_score` | Rang und Punktwert der Volltextsuche |
+| `vektor_rang`, `vektor_distanz` | Rang und Cosine-Distanz der Vektorsuche |
+| `rrf_score` | Zusammengeführter Rangwert |
+
+Der RRF-Wert dient der Sortierung und ist keine Wahrscheinlichkeit für die
+Richtigkeit eines Treffers. Auch die besten Treffer können unpassend sein.
+Die Antwort muss deshalb weiterhin durch den gefundenen Kontext belegt sein.
+
+### Ablauf von POST /wartung
+
+Die bestehende Wartungsfunktion wurde um Frage-Embeddings, hybride Suche
+und Traces ergänzt:
+
+1. FastAPI empfängt `frage` und `produkt_id`.
+2. `generiere_embedding_async` erzeugt das Frage-Embedding.
+3. `suche_wartungs_chunks` ruft `suche_chunks_hybrid` auf.
+4. `generiere_wartungsantwort` erhält die gefundenen Absätze als Kontext.
+5. Die API liefert Antwort, Quellen, `gefunden` und `trace_id` zurück.
+
+Ohne Treffer wird „weiß ich nicht“ zurückgegeben und kein Antwortmodell
+aufgerufen. Bei vorhandenen Treffern muss das Modell ebenfalls „weiß ich
+nicht“ ausgeben, wenn die Antwort nicht im Kontext steht. Bei technischen
+Fehlern liefert der Endpunkt HTTP 503.
+
+Die Quellenliste enthält aktuell alle abgerufenen Textstellen. Die Antwort
+nennt zusätzlich die verwendete Seite und den Abschnitt. Dieses Verhalten
+wurde für die Embedding-Anbindung beibehalten.
+
+### Vollständigen Ablauf testen
+
+Im Projekt-Hauptordner mit aktivierter virtueller Umgebung:
+
+```bash
+python -m uvicorn app.main:app --app-dir harness --reload
+```
+
+Unter http://127.0.0.1:8000/docs kann `POST /wartung` getestet werden:
+
+```json
+{
+  "frage": "Darf beim Programm Maschine reinigen Wäsche in der Trommel sein?",
+  "produkt_id": 1
+}
+```
+
+Für den getesteten Miele-Datenbestand lautet die erwartete Aussage:
+Keine Textilien einfüllen; die Reinigung erfolgt mit leerer Trommel.
+Beleg: Seite 56, Abschnitt „Programme“.
+
+### Retrieval ohne Antwortgenerierung testen
+
+```bash
+python scripts/test_retrieval_live.py --live --produkt-id 1 --text "Darf beim Programm Maschine reinigen Wäsche in der Trommel sein?"
+```
+
+Dieser Test erzeugt das Frage-Embedding und ruft die Suche auf, generiert
+aber keine Antwort. Er zeigt unter anderem Chunk-IDs, Seiten und Rangwerte.
+Die fachliche Relevanz wird gegen die Originalanleitung geprüft.
+Mit `--nur-volltext` lässt sich zum Vergleich ausschließlich die
+Volltextsuche testen.
+
+## Traces und Evaluierung
+
+Durchläufe des Wartungs-Endpunkts werden als JSONL-Dateien im Ordner
+`traces/` gespeichert. Die API-Antwort enthält die zugehörige `trace_id`.
+Die Traces enthalten unter anderem:
+
+- Frage, Produkt-ID und Zeitpunkt,
+- Embedding-Modell und Vektordimension,
+- alle Retrieval-Treffer einschließlich Text und Rangwerten,
+- Suchaufruf und vollständigen Prompt,
+- Modellversuche und Fallbacks,
+- Antwort, Laufzeit und verfügbaren Tokenverbrauch.
+
+Nicht ermittelte Kosten werden als `null` gespeichert. Die Trace-Dateien
+werden nicht automatisch nach Git übertragen; vor dem Commit die
+Dateiauswahl und Ignore-Regeln prüfen.
+
+### Golden Dataset
+
+Im Ordner `evaluation/` liegen:
+
+| Datei | Zweck |
+|---|---|
+| `Golden_Dataset_15_Faelle.md` | Beschreibung der Testfälle und Bewertung |
+| `golden_dataset.entwurf.json` | Maschinenlesbarer Dataset-Entwurf |
+| `bewertungsvorlage_45_lauefe.json` | Vorlage für 15 Fälle mit jeweils drei Durchläufen |
+| `pruefe_dataset.py` | Prüfung der Dataset-Struktur und offener Angaben |
+| `kennzahlen.py` | Unterstützung bei der Kennzahlenauswertung |
+
+Geplant sind mindestens 15 Fälle, davon mindestens 20 Prozent Negativfälle.
+Die Kategorien umfassen Störung/Wartung, Produktfinder, mehrdeutige Fragen
+und Fragen außerhalb des Bestands.
+
+Bewertet wird getrennt auf drei Ebenen:
+
+- Retrieval: Recall@5 und MRR anhand vorher festgelegter relevanter Belege.
+- Generierung: Faithfulness und Answer Relevance.
+- Ende-zu-Ende: drei Durchläufe pro Fall, Rubrik 0/1/2 und zwei unabhängig
+  bewertende Personen. Korrektes Nichtbeantworten zählt bei entsprechendem
+  Erwartungsverhalten als Erfolg.
+
+Die Fälle sind noch mit dem tatsächlichen Produktbestand und den
+Originaldokumenten vollständig abzugleichen. Strukturprüfung allein
+bestätigt keine fachliche Richtigkeit:
+
+```bash
+python evaluation/pruefe_dataset.py
+```
+
+Für die formalen Testläufe müssen Fall-ID und Durchlaufnummer eindeutig
+mit dem jeweiligen Trace verknüpft werden. Im bisherigen manuellen Test
+sind `fall_id` und `durchlauf` noch leer; auch Code-, Datenbestand- und
+Prompt-Version sind noch nicht hinterlegt. Die vollständige Evaluierung
+steht noch aus.
+
+### Bisher bestätigter Teststand
+
+- Miele (Produkt-ID 1): 201 Chunk-Embeddings gespeichert.
+- Siemens (Produkt-ID 3): 137 Chunk-Embeddings gespeichert.
+- Insgesamt: 338 gespeicherte Chunk-Embeddings.
+- Miele-Beispielfrage: relevante Seite 56 auf Rang 1 der Vektorsuche und
+  Rang 2 der hybriden Suche.
+- `POST /wartung`: korrekte Antwort mit HTTP 200 und Trace-Aufzeichnung.
+
+Dies bestätigt den vollständigen Ablauf für diesen Testfall. Weitere
+Fragen, die Trennung nach Produkt und Negativfälle müssen noch geprüft
+werden. Neu gespeicherte Embeddings liegen in Supabase; sie werden nicht
+mit einem Git-Push übertragen. Auch SQL-Dateien werden beim Push nicht
+automatisch ausgeführt.
+
 ## Stand
 
 | | |
 |---|---|
-| Schema lauffähig, drei Migrationen | ✅ |
+| Schema lauffähig, vier Migrationen vorhanden | ✅ |
 | RLS aktiv, Policy für `produkt` | ✅ |
 | Skripte für PDF-Upload, Datenblatt-Auswertung, Chunking | ✅ |
 | `chunk` gefüllt (338 Absätze aus 4 PDFs) | ✅ |
 | `suche_chunks`, Volltextsuche | ✅ |
-| `suche_chunks`, Vektorsuche und RRF | offen, braucht das Embedding-Modell |
+| `suche_chunks_hybrid`, Vektorsuche und RRF | ✅ |
+| Chunk-Embeddings für Miele und Siemens (338 insgesamt) | ✅ |
+| Embedding-Anbindung an `POST /wartung` | ✅, ein vollständiger Miele-Testfall geprüft |
 | `finde_produkte` als SQL-Funktion | offen, läuft vorerst im Backend |
 | Produktkatalog aus EPREL | offen |
-| Golden Dataset, Traces | offen |
+| Trace-Aufzeichnung im Wartungs-Endpunkt | ✅ |
+| Golden Dataset und Bewertungsvorlage | Entwurf vorhanden; fachlicher Abgleich und vollständige Evaluierung offen |
 
 ## Hinweis nach AI Act Art. 50
-
 Diese Anwendung nutzt ein KI-System. Antworten können fehlerhaft sein und ersetzen
 keine fachkundige Beratung. Bei Elektroreparaturen gibt die Anwendung keine
 Anleitung, sondern verweist auf den Kundendienst.
