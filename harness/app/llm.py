@@ -157,44 +157,70 @@ class WartungsmodellFehler(RuntimeError):
 
 
 async def generiere_wartungsantwort(
-    frage: str, absaetze: list[dict], *, lauf: dict | None = None,
+    frage: str,
+    absaetze: list[dict],
+    *,
+    lauf: dict | None = None,
 ) -> str:
-    """Bestehender Wartungsprompt und Fallback, mit optionalem JSONL-Trace."""
-    # System-Prompt exakt nach den Vorgaben aus dem Dokument "Durchstich 10. November"
-    wartung_system_prompt = """Du bist ein technischer Wartungsberater für Haushaltsgeräte.
+    """Erzeugt eine quellengebundene Antwort mit Fallback und optionalem Trace."""
+
+    system_prompt = """Du bist ein technischer Wartungsberater für Haushaltsgeräte.
 BEFOLGE DIESE REGELN STRIKT:
 1. Du darfst ausschließlich aus den übergebenen Absätzen antworten.
 2. Wenn die Antwort nicht in den Absätzen steht, antworte exakt mit: 'weiß ich nicht'. Du darfst nicht raten!
 3. SICHERHEITSREGEL: Bei Elektroreparaturen darfst du keine Anleitung geben, sondern musst auf den Kundendienst verweisen.
 4. Du musst die Quelle (Seite und Abschnitt) in deine Antwort übernehmen (z.B. 'laut Seite 34, Abschnitt Störungen')."""
 
-    # Kontext aus den Datenbank-Chunks bauen
-    kontext_text = "HIER SIND DIE AUSZÜGE AUS DER BEDIENUNGSANLEITUNG:\n\n"
+    # Gefundene Textstellen als Kontext zusammenstellen.
+    kontext = []
     for chunk in absaetze:
         seite = chunk.get("seite", "Unbekannt")
         abschnitt = chunk.get("abschnitt", "Unbekannt")
         inhalt = chunk.get("inhalt", "")
-        kontext_text += f"--- Seite: {seite} | Abschnitt: {abschnitt} ---\n{inhalt}\n\n"
 
-    # Die finale Nachricht an das LLM
-    finaler_prompt = f"{kontext_text}\n\nFRAGE DES NUTZERS:\n{frage}"
+        kontext.append(
+            f"--- Seite: {seite} | Abschnitt: {abschnitt} ---\n{inhalt}"
+        )
 
+    prompt = (
+        "HIER SIND DIE AUSZÜGE AUS DER BEDIENUNGSANLEITUNG:\n\n"
+        + "\n\n".join(kontext)
+        + f"\n\nFRAGE DES NUTZERS:\n{frage}"
+    )
 
+    # Vollständigen Prompt für die Evaluierung speichern.
     if lauf is not None:
-        lauf['finaler_prompt'] = {'system': wartung_system_prompt, 'user': finaler_prompt}
-    for model_name in dict.fromkeys([settings.gemini_model] + settings.fallback_models):
-        versuch_kontext = modellversuch(lauf, model_name) if lauf is not None else nullcontext()
+        lauf["finaler_prompt"] = {
+            "system": system_prompt,
+            "user": prompt,
+        }
+
+    # Hauptmodell zuerst, anschließend Fallbacks; keine doppelten Aufrufe.
+    modelle = dict.fromkeys(
+        [settings.gemini_model] + settings.fallback_models
+    )
+
+    for modell in modelle:
+        if lauf is not None:
+            protokoll = modellversuch(lauf, modell)
+        else:
+            protokoll = nullcontext()
+
         try:
-            with versuch_kontext as versuch:
+            with protokoll:
                 antwort = await _client.aio.models.generate_content(
-                    model=model_name, contents=finaler_prompt,
-                    config=types.GenerateContentConfig(system_instruction=wartung_system_prompt),
+                    model=modell,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        system_instruction=system_prompt
+                    ),
                 )
-                usage = getattr(antwort, 'usage_metadata', None)
-                if versuch is not None and usage is not None and hasattr(usage, 'model_dump'):
-                    versuch['tokenverbrauch'] = usage.model_dump(mode='json', exclude_none=True)
-                    lauf['tokenverbrauch'] = versuch['tokenverbrauch']
-                return antwort.text or 'weiß ich nicht'
+
+                return antwort.text or "weiß ich nicht"
+
         except errors.APIError:
             continue
-    raise WartungsmodellFehler('Alle konfigurierten Antwortmodelle fehlgeschlagen.')
+
+    raise WartungsmodellFehler(
+        "Alle konfigurierten Antwortmodelle fehlgeschlagen."
+    )
