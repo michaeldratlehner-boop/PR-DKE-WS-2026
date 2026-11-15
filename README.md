@@ -338,6 +338,16 @@ wurde für die Embedding-Anbindung beibehalten.
 
 ### Vollständigen Ablauf testen
 
+### Anwendung starten
+
+Mit aktivierter virtueller Umgebung im Projekt-Hauptordner:
+
+    python start.py
+
+Startet Backend (http://127.0.0.1:8000/docs) und Frontend (http://localhost:5173) gemeinsam.
+Beenden mit Strg+C.
+
+
 Im Projekt-Hauptordner mit aktivierter virtueller Umgebung:
 
 ```bash
