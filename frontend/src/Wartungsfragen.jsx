@@ -107,8 +107,9 @@ export default function Wartungsfragen({ setSeite }) {
 
         try {
             const daten = await uploadAnleitung(datei);
+           setProduktId(String(daten.produkt_id)); // <-- füllt das Feld automatisch aus
             setUploadStatus(
-                `Hochgeladen (Dokument-ID: ${daten.dokument_id}). ${daten.hinweis}`
+                `Hochgeladen (Produkt-ID: ${daten.produkt_id}, Dokument-ID: ${daten.dokument_id}). ${daten.hinweis}`
             );
             // Dateiauswahl nach erfolgreichem Upload zurücksetzen
             setDatei(null);

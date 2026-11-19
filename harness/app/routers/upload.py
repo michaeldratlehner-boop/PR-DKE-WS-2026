@@ -18,18 +18,20 @@ async def upload_anleitung(
 
     try:
         # 3. Speichern in Supabase Storage und in der Tabelle "dokument" (synchron & schnell)
-        dokument_id, datei_pfad = speichere_pdf_und_datenbank(datei.filename, datei_bytes)
-
-        titel = datei.filename.replace(".pdf", "")
+        produkt_id, dokument_id, datei_pfad = speichere_pdf_und_datenbank(
+            datei.filename, datei_bytes
+        )
 
         # 4. Hintergrundaufgabe an FastAPI übergeben (blockiert den Nutzer nicht)
-        background_tasks.add_task(verarbeite_pdf_im_hintergrund, dokument_id, datei_pfad, titel)
-
+        background_tasks.add_task(
+            verarbeite_pdf_im_hintergrund, produkt_id, dokument_id, datei_pfad
+        )
         # 5. Sofortige Rückmeldung an das Frontend
         return {
             "status": "Erfolgreich hochgeladen",
+            "produkt_id": produkt_id,
             "dokument_id": dokument_id,
-            "hinweis": "Die Datei wird im Hintergrund verarbeitet (Chunking & Embedding)."
+            "hinweis": "Die Datei wird im Hintergrund verarbeitet (Chunking & Embedding).",
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Fehler beim Upload: {str(e)}")
