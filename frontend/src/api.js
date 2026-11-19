@@ -72,3 +72,33 @@ export async function frageWartung(frage, produktId) {
 
     return await antwort.json();
 }
+
+// PDF-Anleitung an das FastAPI-Backend hochladen
+export async function uploadAnleitung(datei) {
+    const formData = new FormData();
+    // Der Feldname "datei" muss exakt zum Parameter in upload.py passen
+    formData.append("datei", datei);
+
+    let antwort;
+    try {
+        antwort = await fetch(`${API_URL}/upload`, {
+            method: "POST",
+            body: formData,
+        });
+    } catch {
+        throw new Error("Der Server ist nicht erreichbar.");
+    }
+
+    if (!antwort.ok) {
+        let text = `Upload-Fehler ${antwort.status}`;
+        try {
+            const daten = await antwort.json();
+            if (typeof daten.detail === "string") text = daten.detail;
+        } catch {
+            /* Standardtext bleibt */
+        }
+        throw new Error(text);
+    }
+
+    return await antwort.json();
+}

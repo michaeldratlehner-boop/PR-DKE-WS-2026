@@ -1,6 +1,6 @@
 
 import { useState, useRef } from 'react';
-import { frageWartung } from './api.js';
+import { frageWartung, uploadAnleitung} from './api.js';
 import './Wartungsfragen.css';
 
 export default function Wartungsfragen({ setSeite }) {
@@ -28,6 +28,10 @@ export default function Wartungsfragen({ setSeite }) {
 
     // Referenz auf das Datei-Eingabefeld
     const dateiInput = useRef(null);
+
+    // Status für den PDF-Upload
+    const [uploadLaden, setUploadLaden] = useState(false);
+    const [uploadStatus, setUploadStatus] = useState("");
 
     // Zurück zur Startseite
     function handleClickBack() {
@@ -93,6 +97,30 @@ export default function Wartungsfragen({ setSeite }) {
         }
     }
 
+    // Ausgewählte PDF-Datei an das Backend senden
+    async function handleFileUpload() {
+        if (!datei) return;
+
+        setUploadLaden(true);
+        setFehler("");
+        setUploadStatus("");
+
+        try {
+            const daten = await uploadAnleitung(datei);
+            setUploadStatus(
+                `Hochgeladen (Dokument-ID: ${daten.dokument_id}). ${daten.hinweis}`
+            );
+            // Dateiauswahl nach erfolgreichem Upload zurücksetzen
+            setDatei(null);
+            if (dateiInput.current) {
+                dateiInput.current.value = "";
+            }
+        } catch (error) {
+            setFehler(error.message);
+        } finally {
+            setUploadLaden(false);
+        }
+    }
 
     return (
         <section className="wf-seite">
@@ -210,14 +238,30 @@ export default function Wartungsfragen({ setSeite }) {
                         <div className="wf-datei">
                             <span>Ausgewählt: {datei.name}</span>
 
-                            {/* Datei wieder entfernen wenn sie doch nicht benötigt wird - oder falsch ausgewählt*/}
-                            <button
-                                type="button"
-                                onClick={handleDeleteFile}
-                            >
-                                Entfernen
-                            </button>
-                    </div>
+                            <div>
+                                <button
+                                    type="button"
+                                    onClick={handleFileUpload}
+                                    disabled={uploadLaden}
+                                    style={{ marginRight: "8px", backgroundColor: "#d1efc9" }}
+                                >
+                                    {uploadLaden ? "Lädt hoch..." : "Hochladen"}
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={handleDeleteFile}
+                                    disabled={uploadLaden}
+                                >
+                                    Entfernen
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Erfolgsstatus nach dem Upload */}
+                    {uploadStatus && (
+                        <p className="wf-dateiname">{uploadStatus}</p>
                     )}
             </div>
 
