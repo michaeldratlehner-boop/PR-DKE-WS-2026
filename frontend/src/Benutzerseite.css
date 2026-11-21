@@ -1,0 +1,36 @@
+/* Gesamte Benutzerseite */
+.b-seite {
+    min-height: 100vh;
+    background-color: #f7f8fa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 45px 20px;
+    font-family: Arial, sans-serif;
+    color: #111111;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Überschrift */
+.haupttitel {
+    font-size: 40px;
+    text-align: center;
+    margin: 70px 0 65px;
+}
+
+/* Zurück-Button */
+.b-zurueck {
+    background-color: #dce5f7;
+    border: none;
+    border-radius: 14px;
+    height: 40px;
+    cursor: pointer;
+    color: #111;
+
+    width: 84px;
+    position: absolute;
+    top: 41px;
+    left: max(20px, calc(50% - 365px));
+
+}

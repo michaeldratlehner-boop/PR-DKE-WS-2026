@@ -9,6 +9,8 @@
     padding: 45px 20px;
     font-family: Arial, sans-serif;
     color: #111111;
+    position: relative;
+    box-sizing: border-box;
 }
 
 /* Logo und App-Name */
@@ -26,25 +28,11 @@
     height: auto;
 }
 
-.startseite .header h1 {
-    font-size: 22px;
-    font-weight: bold;
-    margin: 8px 0 0;
-}
-
-.startseite .header h2 {
-    font-size: 20px;
-    font-weight: 300;
-    color: #555555;
-    margin: 0;
-}
-
 /* Überschrift */
 .haupttitel {
     font-size: 40px;
-    font-weight: bold;
     text-align: center;
-    margin: 45px 0 45px;
+    margin: 70px 0 65px;
 }
 
 /* Container für beide Buttons */
@@ -87,6 +75,9 @@
     width: 88px;
     height: 88px;
     object-fit: contain;
+    background-color: #eef2f8;
+    border-radius: 22px;
+    padding: 8px;
 }
 
 /* Button-Überschriften */
@@ -103,6 +94,41 @@
     color: #666666;
     line-height: 1.3;
     margin-top: 8px;
+}
+/* Benutzer-Button rechts oben */
+.button-icon-benutzer {
+    position: absolute;
+    top: 25px;
+    right: 80px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background-color: transparent;
+    border: none;
+    border-radius: 12px;
+    padding: 8px 12px;
+
+    cursor: pointer;
+}
+
+/* Bild im Benutzer-Button */
+.button-icon-benutzer img {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+}
+
+/* Text neben dem Benutzerbild */
+.benutzer-button {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Hover-Effekt */
+.button-icon-benutzer:hover {
+    background-color: #e9ebf0;
 }
 
 /* Effekt beim Darüberfahren */
