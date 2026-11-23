@@ -1,0 +1,68 @@
+/* Gesamte Registrierung-Seite */
+.reg-seite {
+    min-height: 100vh;
+    background-color: #f7f8fa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 45px 20px;
+    font-family: Arial, sans-serif;
+    color: #111111;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Überschrift */
+.haupttitel {
+    font-size: 40px;
+    text-align: center;
+    margin: 70px 0 65px;
+}
+
+/* Zurück-Button */
+.reg-zurueck {
+    background-color: #dce5f7;
+    border: none;
+    border-radius: 14px;
+    height: 40px;
+    cursor: pointer;
+    color: #111;
+
+    width: 84px;
+    position: absolute;
+    top: 41px;
+    left: max(20px, calc(50% - 365px));
+
+}
+
+/* Registrierung */
+.ok-button{
+    border: none;
+    border-radius: 20px;
+    background-color: #e1e4ec;
+    padding: 12px 24px;
+    color: black;
+    font-size: 12px;
+    cursor: pointer;
+    margin: 30px 0 30px
+}
+
+
+/* Texteingabefeld für Email und Passwort*/
+.daten-eingabe {
+    width: 320px;
+    height: 45px;
+    flex: none;
+    box-sizing: border-box;
+
+    background-color: white;
+    border: 1px solid #aaa;
+    border-radius: 12px;
+    padding: 0 15px;
+
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+
+    margin: 10px 0 10px
+}
