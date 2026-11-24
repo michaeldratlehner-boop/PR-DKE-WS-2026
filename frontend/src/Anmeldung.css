@@ -53,6 +53,10 @@
     border: none;
     cursor: pointer;
     background-color: #f7f8fa;
+    /* Schrift war sonst weiß und dadurch unsichtbar */
+    color: #333333;
+    font-size: 14px;
+    text-decoration: underline;
 }
 
 /* Texteingabefeld für Email und Passwort*/
@@ -72,4 +76,9 @@
     outline: none;
 
     margin: 10px 0 10px
+}
+/* Fehlermeldung, z.B. bei falschem Passwort */
+.fehler-text {
+    color: #c0392b;
+    font-size: 14px;
 }

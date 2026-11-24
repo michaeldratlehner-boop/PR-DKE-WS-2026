@@ -1,6 +1,7 @@
 import './Benutzerseite.css'
 
-export default function Benutzerseite({ setSeite }) {
+{/*Mein Konto: zeigt den angemeldeten Benutzer und seine Waschmaschinen*/}
+export default function Benutzerseite({ setSeite, benutzer }) {
 
 
     return (
@@ -11,10 +12,13 @@ export default function Benutzerseite({ setSeite }) {
                 zurück
             </button>
 
-            <scan
+            <span
                 className="haupttitel">
                 Mein Konto
-            </scan>
+            </span>
+
+            {/*zeigt an, wer gerade angemeldet ist*/}
+            {benutzer && <p>Angemeldet als {benutzer.email}</p>}
 
 
 

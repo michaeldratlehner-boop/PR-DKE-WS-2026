@@ -31,6 +31,18 @@ class ProduktfinderAntwort(BaseModel):
     treffer: list[Produkt]
     hinweis: str = KI_HINWEIS
 
+class BenutzerAnfrage(BaseModel):
+    """E-Mail und Passwort aus der Anmeldung bzw. Registrierung."""
+    email: str
+    # Supabase verlangt mindestens 6 Zeichen
+    passwort: str = Field(min_length=6)
+
+class BenutzerAntwort(BaseModel):
+    """Das bekommt das Frontend nach erfolgreicher Anmeldung bzw. Registrierung zurück."""
+    email: str
+    # Token ist leer, wenn die E-Mail erst noch bestätigt werden muss
+    token: str | None = None
+
 class ChatAnfrage(BaseModel):
     nachricht: str
 

@@ -9,6 +9,8 @@ import Benutzerseite from "./Benutzerseite.jsx";
 {/*App verwalten den Start der App und "merkt sich auf welcher Seite wir sind"*/}
 export default function App() {
     const [seite, setSeite] = useState("start");
+    //angemeldeter Benutzer (email und token), null = niemand angemeldet
+    const [benutzer, setBenutzer] = useState(null);
 
     return (
         <main>
@@ -22,13 +24,13 @@ export default function App() {
                 <Wartungsfragen setSeite={setSeite} />}
 
             {seite === "anmeldung" &&
-                <Anmeldung setSeite={setSeite} />}
+                <Anmeldung setSeite={setSeite} setBenutzer={setBenutzer} />}
 
             {seite === "registrierung" &&
-                <Registrierung setSeite={setSeite} />}
+                <Registrierung setSeite={setSeite} setBenutzer={setBenutzer} />}
 
             {seite === "benutzer" &&
-                <Benutzerseite setSeite={setSeite} />}
+                <Benutzerseite setSeite={setSeite} benutzer={benutzer} />}
         </main>
     );
 }
