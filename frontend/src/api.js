@@ -72,3 +72,41 @@ export async function frageWartung(frage, produktId) {
 
     return await antwort.json();
 }
+
+
+// Neues Konto anlegen
+// schickt E-Mail und Passwort an das Backend und gibt email + token zurück
+export async function registrieren(email, passwort) {
+    const antwort = await fetch(`${API_URL}/registrierung`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, passwort: passwort })
+    });
+
+    const daten = await antwort.json();
+
+    if (!antwort.ok) {
+        throw new Error("Registrierung fehlgeschlagen. Gibt es die E-Mail schon?");
+    }
+
+    return daten;
+}
+
+
+// Mit E-Mail und Passwort anmelden
+// bei falschen Daten wird ein Fehler geworfen, den die Anmeldeseite anzeigt
+export async function anmelden(email, passwort) {
+    const antwort = await fetch(`${API_URL}/anmeldung`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, passwort: passwort })
+    });
+
+    const daten = await antwort.json();
+
+    if (!antwort.ok) {
+        throw new Error("E-Mail oder Passwort ist falsch.");
+    }
+
+    return daten;
+}

@@ -66,3 +66,8 @@
 
     margin: 10px 0 10px
 }
+/* Fehlermeldung, z.B. wenn die Passwörter nicht gleich sind */
+.fehler-text {
+    color: #c0392b;
+    font-size: 14px;
+}
