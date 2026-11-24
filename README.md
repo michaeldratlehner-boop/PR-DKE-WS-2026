@@ -95,6 +95,7 @@ Dann `.env` öffnen und die Werte eintragen. Zu finden im Supabase-Dashboard:
 |---|---|
 | `SUPABASE_URL` | Project Settings → API |
 | `SUPABASE_KEY` | Project Settings → API (`service_role` bzw. „secret") |
+| `SUPABASE_ANON_KEY` | Project Settings → API Keys → Publishable key (`sb_publishable_…`), für Registrierung und Anmeldung. **Pflicht**, sonst startet das Backend nicht |
 | `DATABASE_URL` | Project Settings → Database |
 | `SUPABASE_BUCKET` | Name des Storage-Buckets, Standard `anleitungen` |
 

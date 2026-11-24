@@ -5,8 +5,22 @@
 .venv/
 __pycache__/
 
-# PyCharm-Einstellungen (persönlich)
+# PyCharm- und VS-Code-Einstellungen (persönlich)
 .idea/
+.vscode/
+
+# macOS-Systemdateien
+.DS_Store
+
+# Frontend: Pakete legt "npm install" selbst an, dist entsteht beim Bauen
+frontend/node_modules/
+frontend/dist/
+
+# Protokolle, die das Backend beim Testen anlegt
+traces/
+
+# lokale SQL-Tests
+tests/sql/
 
 # Heruntergeladene Anleitungen: urheberrechtlich geschuetzt,
 # kommen nicht ins Repo. Der Ordner selbst bleibt erhalten.

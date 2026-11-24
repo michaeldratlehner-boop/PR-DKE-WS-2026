@@ -1,0 +1,83 @@
+/* Gesamte Benutzerseite */
+.b-seite {
+    min-height: 100vh;
+    background-color: #f7f8fa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 45px 20px;
+    font-family: Arial, sans-serif;
+    color: #111111;
+    position: relative;
+    box-sizing: border-box;
+}
+
+/* Überschrift */
+.haupttitel {
+    font-size: 40px;
+    text-align: center;
+    margin: 70px 0 65px;
+}
+
+/* Zurück-Button */
+.b-zurueck {
+    background-color: #dce5f7;
+    border: none;
+    border-radius: 14px;
+    height: 40px;
+    cursor: pointer;
+    color: #111;
+
+    width: 84px;
+    position: absolute;
+    top: 41px;
+    left: max(20px, calc(50% - 365px));
+
+}
+
+/* Container für die beiden Felder */
+.b-bereich {
+    width: 100%;
+    max-width: 650px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 40px;
+}
+
+/* Hintergrundfeld */
+.b-feld {
+    background-color: white;
+    border: 1px solid #e1e4ec;
+    border-radius: 16px;
+    padding: 25px;
+    box-sizing: border-box;
+}
+
+/* Überschrift innerhalb des Feldes */
+.b-feld h2 {
+    font-size: 20px;
+    margin: 0 0 15px;
+}
+
+/* PDF-Button */
+.b-upload {
+    display: inline-block;
+    background-color: #dce5f7;
+    border-radius: 12px;
+    padding: 12px 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+/* Einzelne Waschmaschine in der Übersicht */
+.b-maschine {
+    background-color: #f7f8fa;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}

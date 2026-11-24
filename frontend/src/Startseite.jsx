@@ -1,7 +1,8 @@
 //Bilder vorher importieren
 import logo from './assets/Logo.png'
 import search from './assets/Lupe.png'
-import tool from './assets/Wergzeug.png'
+import tool from './assets/Werkzeug.png'
+import user from './assets/Benutzerbutton.png'
 import './Startseite.css'
 
 {/*Funktion zur Anzeige des Logos*/}
@@ -9,7 +10,7 @@ function Logo() {
     return (
         <img
             src = {logo}
-            width= "120"
+            width= "260"
             alt ="Logo"
         />
     );
@@ -37,6 +38,17 @@ function Tool(){
     );
 }
 
+{/*Funktion zur Anzeige des Bildes  für den Benutzer*/}
+function User(){
+    return(
+        <img
+            src = {user}
+            width= "20"
+            alt ="Benutzerprofil"
+        />
+    );
+}
+
 
 
 {/*setSeite wird übergeben -> kommt von App.jsx*/}
@@ -50,6 +62,10 @@ export default function Startseite({setSeite}){
     function handleClickTool(){
         setSeite("wartung");
     }
+
+    function handleClickUser(){
+        setSeite("anmeldung");
+    }
     return(
 
     //Seite bzw. Klasse angeben wegen design
@@ -58,13 +74,21 @@ export default function Startseite({setSeite}){
         {/*Bild anzeigen (von Funktion Logo) und Überschrift*/}
         <div className="header">
             <Logo/>
-            {/*Überschriften anzeigen*/}
-            <h1>Waschmaschinen</h1>
-            <h2>Assistent</h2>
         </div>
 
 
-            <h1 className = "haupttitel">
+        <button
+            className="button-icon-benutzer"
+            onClick={handleClickUser}
+        >
+            <User/>
+            <span className="benutzer-button">
+        Mein Konto
+    </span>
+        </button>
+
+
+        <h1 className = "haupttitel">
                 Wie kann ich dir helfen?
             </h1>
 
@@ -82,7 +106,7 @@ export default function Startseite({setSeite}){
             </span>
 
             <span className ="button-text">
-                Finde die passende Waschmaschine für dich
+                Finde die passende Waschmaschine
             </span>
         </button>
 
@@ -96,7 +120,7 @@ export default function Startseite({setSeite}){
                         Wartungsfragen
                     </span>
                 <span className="button-text">
-                        Finde die Lösung für dein Problem
+                        Finde die Lösung für das Problem
                     </span>
         </button>
         </div>

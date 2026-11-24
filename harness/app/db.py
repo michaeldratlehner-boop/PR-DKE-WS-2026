@@ -6,6 +6,21 @@ from app.config import settings
 _client: Client = create_client(settings.supabase_url, settings.supabase_key)
 
 
+def registriere_benutzer(email: str, passwort: str):
+    """Legt einen neuen Benutzer in Supabase an."""
+    # eigener Client mit dem anon key, damit _client nicht verändert wird
+    auth_client = create_client(settings.supabase_url, settings.supabase_anon_key)
+    antwort = auth_client.auth.sign_up({"email": email, "password": passwort})
+    return antwort
+
+
+def melde_benutzer_an(email: str, passwort: str):
+    """Prüft E-Mail und Passwort. Bei falschen Daten gibt es einen Fehler."""
+    auth_client = create_client(settings.supabase_url, settings.supabase_anon_key)
+    antwort = auth_client.auth.sign_in_with_password({"email": email, "password": passwort})
+    return antwort
+
+
 def hole_produkte(limit: int = 3) -> list[dict]:
     """Liest die ersten Produkte aus der Tabelle 'produkt'."""
     antwort = _client.table("produkt").select("*").limit(limit).execute()
