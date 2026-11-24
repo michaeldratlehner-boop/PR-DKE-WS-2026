@@ -27,3 +27,7 @@ tests/sql/
 anleitungen/*
 !anleitungen/.gitkeep
 *.pdf
+/frontend
+frontend/package-lock.json
+frontend/package-lock.json
+*.jsonl

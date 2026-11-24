@@ -102,6 +102,8 @@ export async function uploadAnleitung(datei) {
 
     return await antwort.json();
 
+}
+
 // Neues Konto anlegen
 // schickt E-Mail und Passwort an das Backend und gibt email + token zurück
 export async function registrieren(email, passwort) {
