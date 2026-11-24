@@ -2,7 +2,10 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+
 from app.config import settings
+from app.routers import produktfinder, chat, wartung, upload
+
 from app.routers import produktfinder, chat, wartung, benutzer
 
 logging.basicConfig(level=logging.INFO)
@@ -18,6 +21,7 @@ app.add_middleware(
 app.include_router(produktfinder.router)
 app.include_router(chat.router)
 app.include_router(wartung.router)
+app.include_router(upload.router)
 # Registrierung und Anmeldung
 app.include_router(benutzer.router)
 
