@@ -60,14 +60,28 @@
     margin: 0 0 15px;
 }
 
-/* PDF-Button */
+/* PDF auswählen */
 .b-upload {
-    display: inline-block;
+    display: block;
+    width: fit-content;
     background-color: #dce5f7;
+    border: none;
     border-radius: 12px;
     padding: 12px 20px;
     cursor: pointer;
-    margin-top: 10px;
+    margin: 20px auto 0;
+}
+
+/* Waschmaschine anlegen */
+.b-anlegen {
+    display: block;
+    background-color: #d1efc9;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px;
+    cursor: pointer;
+    margin: 15px auto 0;
+    font-size: 14px;
 }
 
 /* Einzelne Waschmaschine in der Übersicht */

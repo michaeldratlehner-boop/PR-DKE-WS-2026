@@ -1,8 +1,39 @@
 import './Benutzerseite.css'
-
+import { useState } from 'react';
+import  './api.js';
+import {uploadAnleitung} from "./api.js";
 {/*Mein Konto: zeigt den angemeldeten Benutzer und seine Waschmaschinen*/}
 export default function Benutzerseite({ setSeite, benutzer }) {
 
+    const [datei, setDatei] = useState(null);
+    const [meldung, setMeldung] = useState("");
+    const [laden, setLaden] = useState(false);
+    const [maschinen, setMaschinen] = useState([]);
+
+    async function handleUpload() {
+        if (!datei) {
+            setMeldung("Bitte zuerst eine PDF-Datei auswählen.");
+            return;
+        }
+
+        setLaden(true);
+        setMeldung("");
+
+        try {
+            const daten = await uploadAnleitung(datei);
+
+            setMeldung(
+                `PDF erfolgreich hochgeladen! Produkt-ID: ${daten.produkt_id}`
+            );
+            setDatei(null);
+
+        } catch (error) {
+            setMeldung(error.message);
+
+        } finally {
+            setLaden(false);
+        }
+    }
 
     return (
         <div className="b-seite">
@@ -38,9 +69,21 @@ export default function Benutzerseite({ setSeite, benutzer }) {
                         <input
                             type="file"
                             accept=".pdf,application/pdf"
+                            onChange={(event) => setDatei(event.target.files[0] || null)}
                             hidden
                         />
                     </label>
+                    {datei && <p>Ausgewählt: {datei.name}</p>}
+
+                    <button
+                        className="b-anlegen"
+                        onClick={handleUpload}
+                        disabled={laden}
+                    >
+                        {laden ? "Wird hochgeladen..." : "Waschmaschine anlegen"}
+                    </button>
+
+                    {meldung && <p>{meldung}</p>}
                 </div>
 
                 {/* Übersicht der Waschmaschinen */}
