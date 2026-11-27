@@ -11,7 +11,25 @@ def registriere_benutzer(email: str, passwort: str):
     # eigener Client mit dem anon key, damit _client nicht verändert wird
     auth_client = create_client(settings.supabase_url, settings.supabase_anon_key)
     antwort = auth_client.auth.sign_up({"email": email, "password": passwort})
+
+    # Ist die E-Mail schon vergeben, meldet Supabase keinen Fehler, sondern
+    # gibt einen Schein-User ohne identities zurück. Dann nichts eintragen.
+    if not antwort.user or not antwort.user.identities:
+        raise ValueError("E-Mail ist bereits registriert.")
+
+    # zusätzlich eine Zeile in unserer eigenen Tabelle "user" anlegen
+    _client.table("user").insert({
+        "email": email,
+        "auth_id": antwort.user.id,
+    }).execute()
+
     return antwort
+
+
+def hole_user_id(email: str) -> int:
+    """Sucht die id aus unserer Tabelle "user", z.B. für user_produkt."""
+    antwort = _client.table("user").select("id").eq("email", email).single().execute()
+    return antwort.data["id"]
 
 
 def melde_benutzer_an(email: str, passwort: str):
